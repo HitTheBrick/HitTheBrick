@@ -16,7 +16,7 @@ var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
-var acceleration = 12 * scale; //acceleration of character
+var acceleration = 20 * scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
 var level = 0; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
@@ -50,7 +50,7 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["wow i'm so proud of you\nyou did the first level", "that wasn't too\nhard right?", "you won, that's cool ig"],
+    winMessages: ["wow i\'m so proud of you\nyou \'did the first level", "that wasn\'t too\nhard right?", "you won, that\'s cool ig"],
     deathMessages: ["h- how did you die\non the first level?"]
   },
   {
