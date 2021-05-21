@@ -172,7 +172,7 @@ function ImageCollection(list, callback) {
 
 var images = new ImageCollection([{
   name: "pepe",
-  url: "blueblock.svg"
+  url: "blueblock.png"
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
