@@ -34,10 +34,12 @@ var isFlashPlaying = true;
 var flashFrame = 0;
 var started = false;
 var consolelog;
-var blue = "rgb(113,87,231)"
-var lightblue = "rgb(172,157,238)"
-var grey = "rgb(128,128,128)"
+var blue = "rgb(113, 87, 231)"
+var lightblue = "rgb(172, 157, 238)"
+var grey = "rgb(128, 128, 128)"
 var darkGrey = "rgb(64, 64, 64)"
+var purple = "rgb(207, 0, 207)"
+var magenta = "rgb(255, 0, 255)"
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -48,9 +50,9 @@ var levels = [{
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: [blue],
-    hitColor: [lightblue],
-    color: [blue],
+    startColor: ["@1:1bongo cat"],
+    hitColor: [purple],
+    color: ["rgb(0, 0, 0)"],
     deadly: [false],
     functions: ["none"],
     eNum: 1, //number of boxes
@@ -187,7 +189,6 @@ var images = new ImageCollection([{
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
 }]);
-
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 window.onkeyup = function(e) {
