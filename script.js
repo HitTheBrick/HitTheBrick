@@ -8,7 +8,7 @@ var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var dy = 0;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
-var levelChangeText = "@blue"
+var levelChangeText = "@pepe"
 var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
@@ -45,7 +45,7 @@ var levels = [{
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: ["@2:1blue"],
+    startColor: ["@2:1pepe"],
     hitColor: ["rgb(150, 150, 150)"],
     color: ["rgb(0, 0, 0)"],
     deadly: [false],
@@ -53,7 +53,7 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["pepe"],
+    winMessages: ["@pepe"],
     deathMessages: ["you fucking cheater"]
   },
   {
@@ -171,7 +171,7 @@ function ImageCollection(list, callback) {
 }
 
 var images = new ImageCollection([{
-  name: "blue",
+  name: "pepe",
   url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueblock.png?raw=true"
 }, {
   name: "bongo cat",
