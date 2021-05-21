@@ -8,7 +8,7 @@ var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var dy = 0;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
-var levelChangeText = "@pepe"
+var levelChangeText = "let's go"
 var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
@@ -36,16 +36,16 @@ var started = false;
 var consolelog;
 
 var levels = [{
-    X: [240 * scale], //x position of box
+    X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
-    W: [80 * scale], //width of box
+    W: [40 * scale], //width of box
     H: [40 * scale], //height of box
     D: [0], //number of hits on box
     isBroke: [false],
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: ["@2:1pepe"],
+    startColor: ["@1:1blue"],
     hitColor: ["rgb(150, 150, 150)"],
     color: ["rgb(0, 0, 0)"],
     deadly: [false],
@@ -53,7 +53,7 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["@pepe"],
+    winMessages: ["wow you did it"],
     deathMessages: ["you fucking cheater"]
   },
   {
@@ -171,8 +171,11 @@ function ImageCollection(list, callback) {
 }
 
 var images = new ImageCollection([{
-  name: "pepe",
+  name: "blue",
   url: "blueblock.png?raw=true"
+}, {
+  name: "purple",
+  url: "purpleblock.png?raw=true"
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
