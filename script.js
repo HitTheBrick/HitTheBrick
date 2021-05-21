@@ -8,7 +8,8 @@ var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var dy = 0;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
-var levelChangeText = "let's go"
+var levelChangeText = "@pepe"
+var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
 var select = 0;
@@ -16,7 +17,8 @@ var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
-var acceleration = 20 * scale; //acceleration of character
+var acceleration = 7 *
+  scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
 var level = 0; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
@@ -31,18 +33,19 @@ var frame = 0;
 var isFlashPlaying = true;
 var flashFrame = 0;
 var started = false;
+var consolelog;
 
 var levels = [{
     X: [240 * scale], //x position of box
     Y: [160 * scale], //y position of box
-    W: [40 * scale], //width of box
+    W: [80 * scale], //width of box
     H: [40 * scale], //height of box
     D: [0], //number of hits on box
     isBroke: [false],
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: ["rgb(0, 0, 0)"],
+    startColor: ["@1:1pepe"],
     hitColor: ["rgb(150, 150, 150)"],
     color: ["rgb(0, 0, 0)"],
     deadly: [false],
@@ -50,8 +53,8 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["wow i\'m so proud of you\nyou \'did the first level", "that wasn\'t too\nhard right?", "you won, that\'s cool ig"],
-    deathMessages: ["h- how did you die\non the first level?"]
+    winMessages: ["@2:3pepe"],
+    deathMessages: ["you fucking cheater"]
   },
   {
     X: [(240 - 25) * scale, (120 - 25) * scale, (240 - 25) * scale, (360 - 25) * scale],
@@ -146,6 +149,34 @@ To make a new level, copy the following format into a new line on the levels var
 	
 */
 
+function ImageCollection(list, callback) {
+  var total = 0,
+    images = {}; //private :)
+  for (var i = 0; i < list.length; i++) {
+    var img = new Image();
+    images[list[i].name] = img;
+    img.onload = function() {
+      total++;
+      if (total == list.length) {
+        setInterval(update, 10);
+      }
+    };
+    img.src = list[i].url;
+  }
+  this.get = function(name) {
+    return images[name] || (function() {
+      throw "Not exist"
+    })();
+  };
+}
+
+var images = new ImageCollection([{
+  name: "pepe",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueblock.svg"
+}, {
+  name: "bongo cat",
+  url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
+}]);
 
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -367,9 +398,23 @@ function gameObjects() {
 
 
         ctx.beginPath();
-        ctx.rect(xPos, yPos, width, height);
-        ctx.fillStyle = curLevel.color[i];
-        ctx.fill();
+        if (curLevel.startColor[i].charAt(0) != "@") {
+          ctx.rect(xPos, yPos, width, height);
+          ctx.fillStyle = curLevel.color[i];
+          ctx.fill();
+        }
+        if (curLevel.startColor[i].charAt(0) == "@") {
+
+         
+          imageRepeat[0] = curLevel.startColor[i].substr(1, curLevel.startColor[i].indexOf(":") - 1);
+          imageRepeat[1] = /[a-zA-Z]/.exec(curLevel.startColor[i]);
+					imageRepeat[1] = imageRepeat[1].index;
+					imageRepeat[1] = curLevel.startColor[i].substr(curLevel.startColor[i].indexOf(":") + 1, imageRepeat[1] - (curLevel.startColor[i].indexOf(":") + 1));
+					
+          for (p = 0; p < imageRepeat[0] * imageRepeat[1]; p++) {
+            ctx.drawImage(images.get(curLevel.startColor[i].match(/[a-zA-Z]/g).join("")), xPos + (width/imageRepeat[0])*(p % imageRepeat[0]), yPos + (height/imageRepeat[1])*(Math.trunc(p/imageRepeat[0])), width/imageRepeat[0], height/imageRepeat[1]);
+          }
+        }
         ctx.font = "bold " + 20 * scale + "px Comic Sans MS";
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
@@ -489,6 +534,7 @@ function hit(i) {
     //window["func_" + levels[level - 1].functions[curEnt].name](levels[level - 1].functions[curEnt].properties)
     levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties)
   }
+
   balfade = 0;
   animate1();
 
@@ -561,27 +607,34 @@ function levelChangeAnimate() {
   ctx.fill();
   ctx.closePath();
   ctx.beginPath();
+  if (txt.charAt(0) != "@") {
+    txt = txt.split("\n")
+    ctx.font = 192 / txt.length * scale + "px Comic Sans MS";
+    for (k = 0; k < txt.length; k++) {
+      txtlength[k] = ctx.measureText(txt[k]).width;
 
-  txt = txt.split("\n")
-  ctx.font = 192 / txt.length * scale + "px Comic Sans MS";
-  for (k = 0; k < txt.length; k++) {
-    txtlength[k] = ctx.measureText(txt[k]).width;
+    }
+    var maxlength = txtlength.reduce(function(a, b) {
+      return Math.max(a, b);
+    });
+    if (maxlength > 320 * scale) {
+      scaleText = (320 * scale / maxlength)
 
-  }
-  var maxlength = txtlength.reduce(function(a, b) {
-    return Math.max(a, b);
-  });
-  if (maxlength > 320 * scale) {
-    scaleText = (320 * scale / maxlength)
+    } else {
+      scaleText = 1;
+    }
+    ctx.font = Math.ceil(192 / txt.length * scaleText * scale) + "px Comic Sans MS"
 
-  } else {
-    scaleText = 1;
-  }
-  ctx.font = Math.ceil(192 / txt.length * scaleText * scale) + "px Comic Sans MS"
 
-  ctx.fillStyle = levelChangeColor[1];
-  for (j = 0; j < txt.length; j++) {
-    ctx.fillText(txt[j], canvas.width / 2 + winCoverMove - canvas.width, (canvas.height / 2) + (ctx.font.match(/\d+/)[0] / 4) + (j - (txt.length - (txt.length / 2 + 0.5))) * (ctx.font.match(/\d+/)[0] * textSpacing));
+    ctx.fillStyle = levelChangeColor[1];
+    for (j = 0; j < txt.length; j++) {
+      ctx.fillText(txt[j], canvas.width / 2 + winCoverMove - canvas.width, (canvas.height / 2) + (ctx.font.match(/\d+/)[0] / 4) + (j - (txt.length - (txt.length / 2 + 0.5))) * (ctx.font.match(/\d+/)[0] * textSpacing));
+    }
+  } else if (txt.charAt(0) == "@") {
+    txt = txt.replace("@", "")
+    var scaleImage = Math.min(300 / images.get(txt).naturalWidth, 200 / images.get(txt).naturalHeight);
+
+    ctx.drawImage(images.get(txt), canvas.width / 2 - (images.get(txt).naturalWidth * scaleImage * 0.5) + winCoverMove - canvas.width, canvas.height / 2 - (images.get(txt).naturalHeight * scaleImage * 0.5), images.get(txt).naturalWidth * scaleImage, images.get(txt).naturalHeight * scaleImage);
   }
 
   ctx.closePath()
@@ -663,4 +716,9 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
   this.closePath();
   return this;
 }
-setInterval(update, 10);
+
+function log() {
+
+	console.log(consolelog);
+}
+setInterval(log, 1000);
