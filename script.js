@@ -177,6 +177,9 @@ var images = new ImageCollection([{
   name: "purple",
   url: "purpleblock.png?raw=true"
 }, {
+  name: "grey",
+  url: "greyblock.png?raw=true"
+}, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
 }]);
