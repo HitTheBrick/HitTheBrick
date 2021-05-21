@@ -170,6 +170,7 @@ function ImageCollection(list, callback) {
   };
 }
 
+
 var images = new ImageCollection([{
   name: "blue",
   url: "blueblock.png?raw=true"
