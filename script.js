@@ -34,7 +34,10 @@ var isFlashPlaying = true;
 var flashFrame = 0;
 var started = false;
 var consolelog;
-
+var blue = "rgb(113,87,231)"
+var lightblue = "rgb(172,157,238)"
+var grey = "rgb(128,128,128)"
+var darkGrey = "rgb(64, 64, 64)"
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -45,9 +48,9 @@ var levels = [{
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: ["@1:1blue"],
-    hitColor: ["rgb(150, 150, 150)"],
-    color: ["rgb(0, 0, 0)"],
+    startColor: [blue],
+    hitColor: [lightblue],
+    color: [blue],
     deadly: [false],
     functions: ["none"],
     eNum: 1, //number of boxes
