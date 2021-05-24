@@ -49,7 +49,7 @@ var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
 var levels = [{
     X: [220 * scale], //x position of box
-    Y: [160 * scale], //y position of box
+    Y: [140 * scale], //y position of box
     W: [40 * scale], //width of box
     H: [40 * scale], //height of box
     D: [0], //number of hits on box
