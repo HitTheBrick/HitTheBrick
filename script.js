@@ -3,7 +3,7 @@ var scale = Math.min(window.innerHeight / canvas.height, window.innerWidth / can
 var ctx = canvas.getContext("2d");
 canvas.height = canvas.height * scale;
 canvas.width = canvas.width * scale;
-var x = canvas.width / 2; //starting position x
+var x = 110 * scale; //starting position x
 var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var dy = 0;
@@ -20,7 +20,7 @@ var pressedKeys = {}; //input checker
 var acceleration = 7 *
   scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 0; //current level
+var level = 2; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
@@ -34,12 +34,19 @@ var isFlashPlaying = true;
 var flashFrame = 0;
 var started = false;
 var consolelog;
-var blue = "rgb(113, 87, 231)"
-var lightblue = "rgb(172, 157, 238)"
-var grey = "rgb(128, 128, 128)"
-var darkGrey = "rgb(64, 64, 64)"
-var purple = "rgb(207, 0, 207)"
-var magenta = "rgb(255, 0, 255)"
+var darkBlue = "rgb(34, 39, 122)"
+var blue = "rgb(102, 102, 255)"
+var lightBlue = "rgb(102, 204, 255)"
+var green = "rgb(8, 242, 110)"
+var darkGreen = "rgb(6, 125, 58)"
+var lightGreen = "rgb(179, 252, 211)"
+var red = "rgb(255, 100, 100)"
+var darkRed = "rgb(207, 37, 37)"
+var lightRed = "rgb(242, 172, 172)"
+var grey = "rgb(144, 144, 144)"
+var lightGrey = "rgb(212, 212, 212)"
+var darkGrey = "rgb(72, 72, 72)"
+var white = "white"
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -50,9 +57,10 @@ var levels = [{
     strength: [3],
     breakable: [true],
     indicator: ["hp"],
-    startColor: ["@1:1bongo cat"],
-    hitColor: [purple],
-    color: ["rgb(0, 0, 0)"],
+    startColor: [green],
+    hitColor: [lightGreen],
+		textColor: [darkGreen],
+    color: [green],
     deadly: [false],
     functions: ["none"],
     eNum: 1, //number of boxes
@@ -62,27 +70,51 @@ var levels = [{
     deathMessages: ["you fucking cheater"]
   },
   {
-    X: [(240 - 25) * scale, (120 - 25) * scale, (240 - 25) * scale, (360 - 25) * scale],
-    Y: [30 * scale, 100 * scale, 100 * scale, 100 * scale],
-    W: [50 * scale, 50 * scale, 50 * scale, 50 * scale],
-    H: [50 * scale, 50 * scale, 50 * scale, 50 * scale],
-    D: [0, 0, 0, 0],
-    isBroke: [false, false, false, false],
-    strength: [5, 5, 5, 5],
-    breakable: [true, false, false, false],
-    indicator: ["hp", "none", "none", "none"],
-    startColor: ["rgb(0, 0, 0)", "rgb(100, 100, 100)", "rgb(100, 100, 100)", "rgb(100, 100, 100)"],
-    hitColor: ["rgb(150, 150, 150)", "rgb(200, 200, 200)", "rgb(200, 200, 200)", "rgb(200, 200, 200)", ],
-    color: ["rgb(0, 0, 0)", "rgb(100, 100, 100)", "rgb(100, 100, 100)", "rgb(100, 100, 100)"],
-    deadly: [false, false, false, false],
-    functions: ["none", "none", "none", "none"],
-    eNum: 4,
+    X: [0, 300 * scale, 0],
+    Y: [140 * scale, 140 * scale, 50 * scale],
+    W: [260 * scale, 180 * scale, 40 * scale],
+    H: [40 * scale, 40 * scale, 40 * scale],
+    D: [0, 0, 0],
+    isBroke: [false, false, false],
+    strength: [0, 0, 5],
+    breakable: [false, false, true],
+    indicator: ["none", "none", "hp"],
+    startColor: [red, red, green],
+    hitColor: [lightRed, lightRed, lightGreen],
+		textColor: [white, white, darkGreen],
+    color: [red, red, green],
+    deadly: [true, true, false],
+    functions: ["none", "none", "none"],
+    eNum: 3,
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["woah, what'd they build\nthose blocks out of?", "look at that, second level\nand it's still boring"],
-    deathMessages: ["bruh"]
+    winMessages: ["win"],
+    deathMessages: ["lose"]
   },
-  {
+	{
+    X: [0, 220 * scale, 440 * scale, 0],
+    Y: [140 * scale, 0, 140 * scale, 180 * scale],
+    W: [40 * scale, 40 * scale, 40 * scale, 180 * scale],
+    H: [40 * scale, 480 * scale, 40 * scale, 40 * scale],
+    D: [0, 0, 0, 0],
+    isBroke: [false, false, false, false],
+    strength: [0, 0, 5, 0],
+    breakable: [false, false, true, false],
+    indicator: ["none", "none", "hp", "none"],
+    startColor: [blue, red, green, grey],
+    hitColor: [lightBlue, lightRed, lightGreen, lightGrey],
+		textColor: [white, white, darkGreen, darkGrey],
+    color: [blue, red, green, grey],
+    deadly: [false, true, false, false],
+    functions: [{name: breakBlock, properties: 1}, "none", "none", "none"],
+    eNum: 4,
+    startX: 110 * scale,
+    startY: 240 * scale,
+    winMessages: ["win"],
+    deathMessages: ["lose"]
+  },
+	
+  /*{
     X: [0, (160 - 20) * scale, (320 - 20) * scale, (160 - 20) * scale],
     Y: [0, (160 - 20) * scale, (160 - 20) * scale, (200 - 20) * scale],
     W: [canvas.width, 40 * scale, 40 * scale, 200 * scale],
@@ -129,9 +161,11 @@ var levels = [{
     startY: 288 * scale,
     winMessages: ["wow i'm so proud of you\nyou did the first level", "that wasn't too\nhard right?", "i don't even know what\nto type on these lol", "you won, that's cool ig"],
     deathMessages: ["placeholder message"]
-  },
+  },*/
+	
 
 ] //color variable for hit animation
+
 /*
 the variable levels below is a way to easily make new levels. The level properties are arranged in arrays, where index 0 would be box 1, index 1 would be box 2, etc. X is the x position of the box(es), Y is the y position of the box(es), W is the width of the box(es), H is the height of the boxes, D is the damage, or the amount of hits on each box, isBroke is a variable that tells whether or not the box is broke, please start this as false, strength is the amount of hits it takes to break each box, and enum is the only variable that isn't an array. This variable's purpose is to simply define the number of boxes on that level.
 
@@ -189,6 +223,7 @@ var images = new ImageCollection([{
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
 }]);
+
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 window.onkeyup = function(e) {
@@ -296,105 +331,7 @@ function move() {
 
 function gameObjects() {
   if (level == 0) {
-    if (isPlaying == false) {
-      animateText();
-    }
-    ctx.beginPath();
-    ctx.fillStyle = startScreenBackground
-    ctx.rect(0, 0, canvas.width, canvas.height)
-    ctx.fill();
-    ctx.closePath();
-    ctx.beginPath();
-    ctx.lineWidth = 10;
-    if (frame % 2 == 0) {
-      ctx.fillStyle = "rgb(250, 184, 255)"
-    } else {
-      ctx.fillStyle = "rgb(64, 64, 64)"
-    }
-    ctx.font = 'bold ' + 71 * scale + 'px Gloria Hallelujah';
-    ctx.textAlign = "center";
-    ctx.fillText('Break The', 237 * scale, 85 * scale);
-    ctx.fillText('Brick', 237 * scale, 165 * scale);
-    ctx.closePath();
-    ctx.beginPath();
-    ctx.font = 'bold ' + 71 * scale + 'px Gloria Hallelujah';
-    ctx.textAlign = "center";
-    if (frame % 2 == 0) {
-      ctx.fillStyle = "rgb(240, 0, 255)"
-    } else {
-      ctx.fillStyle = "rgb(128, 128, 128)"
-    }
-    ctx.fillText('Break The', 240 * scale, 80 * scale);
-    ctx.fillText('Brick', 240 * scale, 160 * scale);
-    ctx.closePath();
-    if (select < 0) {
-      select = 1;
-    }
-    if (select > 1) {
-      select = 0;
-    }
-    ctx.beginPath();
-    if (select == 0 && flashFrame % 2 == 0) {
-      ctx.fillStyle = "rgb(255, 252, 196)"
-    } else {
-      ctx.fillStyle = "rgb(64, 64, 64)"
-    }
-    ctx.roundRect(187 * scale, 193 * scale, 100 * scale, 40 * scale, 10 * scale).fill()
-    ctx.closePath();
-    ctx.beginPath();
-    if (select == 1 && flashFrame % 2 == 0) {
-      ctx.fillStyle = "rgb(255, 252, 196)"
-    } else {
-      ctx.fillStyle = "rgb(64, 64, 64)"
-    }
-    ctx.roundRect(187 * scale, 253 * scale, 100 * scale, 40 * scale, 10 * scale).fill()
-    ctx.beginPath();
-    if (select == 0 && flashFrame % 2 == 0) {
-      ctx.fillStyle = "rgb(250, 237, 9)"
-    } else {
-      ctx.fillStyle = "rgb(128, 128, 128)"
-    }
-    ctx.roundRect((240 - 50) * scale, 190 * scale, 100 * scale, 40 * scale, 10 * scale).fill();
-    ctx.closePath();
-    ctx.beginPath();
-    if (select == 1 && flashFrame % 2 == 0) {
-      ctx.fillStyle = "rgb(250, 237, 9)"
-    } else {
-      ctx.fillStyle = "rgb(128, 128, 128)"
-    }
-    ctx.roundRect((240 - 50) * scale, 250 * scale, 100 * scale, 40 * scale, 10 * scale).fill();
-    ctx.closePath();
-    ctx.beginPath();
-    if (select == 1 && flashFrame % 2 == 0) {
-      ctx.fillStyle = "rgb(250, 237, 9)"
-    } else {
-      ctx.fillStyle = "rgb(128, 128, 128)"
-    }
-    ctx.font = "bold " + 30 * scale + "px Comic Sans MS"
-    ctx.textAlign = "center"
-    ctx.fillText("Play", 240 * scale, 220 * scale)
-    ctx.closePath();
-    ctx.beginPath();
-    if (select == 0) {
-      ctx.fillStyle = "rgb(250, 237, 9)"
-    } else {
-      ctx.fillStyle = "rgb(128, 128, 128)"
-    }
-    ctx.font = "bold " + 20 * scale + "px Comic Sans MS"
-    ctx.textAlign = "center"
-    ctx.fillText("Settings", 240 * scale, 275 * scale)
-    ctx.closePath();
-    if (flashFrame < 20) {
-      if (isFlashPlaying == false) {
-        flash();
-      }
-    }
-    if (flashFrame == 20 && isChanging == false) {
-      setTimeout(levelChangeAnimate, 1000);
-      isChanging = true;
-    }
-
-
+		startScreen();
   } else if (typeof levels[level - 1] === "undefined") {
     level = 1;
   } else {
@@ -416,18 +353,18 @@ function gameObjects() {
         }
         if (curLevel.startColor[i].charAt(0) == "@") {
 
-         
+
           imageRepeat[0] = curLevel.startColor[i].substr(1, curLevel.startColor[i].indexOf(":") - 1);
           imageRepeat[1] = /[a-zA-Z]/.exec(curLevel.startColor[i]);
-					imageRepeat[1] = imageRepeat[1].index;
-					imageRepeat[1] = curLevel.startColor[i].substr(curLevel.startColor[i].indexOf(":") + 1, imageRepeat[1] - (curLevel.startColor[i].indexOf(":") + 1));
-					
+          imageRepeat[1] = imageRepeat[1].index;
+          imageRepeat[1] = curLevel.startColor[i].substr(curLevel.startColor[i].indexOf(":") + 1, imageRepeat[1] - (curLevel.startColor[i].indexOf(":") + 1));
+
           for (p = 0; p < imageRepeat[0] * imageRepeat[1]; p++) {
-            ctx.drawImage(images.get(curLevel.startColor[i].match(/[a-zA-Z]/g).join("")), xPos + (width/imageRepeat[0])*(p % imageRepeat[0]), yPos + (height/imageRepeat[1])*(Math.trunc(p/imageRepeat[0])), width/imageRepeat[0], height/imageRepeat[1]);
+            ctx.drawImage(images.get(curLevel.startColor[i].match(/[a-zA-Z]/g).join("")), xPos + (width / imageRepeat[0]) * (p % imageRepeat[0]), yPos + (height / imageRepeat[1]) * (Math.trunc(p / imageRepeat[0])), width / imageRepeat[0], height / imageRepeat[1]);
           }
         }
         ctx.font = "bold " + 20 * scale + "px Comic Sans MS";
-        ctx.fillStyle = "white";
+        ctx.fillStyle = curLevel.textColor[i];
         ctx.textAlign = "center";
         if (curLevel.indicator[i] == "hp") {
           ctx.fillText("" + curLevel.strength[i] - curLevel.D[i], xPos + width / 2, yPos + height / 2 + 10 * scale);
@@ -730,6 +667,108 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
 
 function log() {
 
-	console.log(consolelog);
+  console.log(consolelog);
+}
+
+function startScreen() {
+  if (isPlaying == false) {
+    animateText();
+  }
+  ctx.beginPath();
+  ctx.fillStyle = startScreenBackground
+  ctx.rect(0, 0, canvas.width, canvas.height)
+  ctx.fill();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.lineWidth = 10;
+  if (frame % 2 == 0) {
+    ctx.fillStyle = "rgb(250, 184, 255)"
+  } else {
+    ctx.fillStyle = "rgb(64, 64, 64)"
+  }
+  ctx.font = 'bold ' + 71 * scale + 'px Gloria Hallelujah';
+  ctx.textAlign = "center";
+  ctx.fillText('Break The', 237 * scale, 85 * scale);
+  ctx.fillText('Brick', 237 * scale, 165 * scale);
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.font = 'bold ' + 71 * scale + 'px Gloria Hallelujah';
+  ctx.textAlign = "center";
+  if (frame % 2 == 0) {
+    ctx.fillStyle = "rgb(240, 0, 255)"
+  } else {
+    ctx.fillStyle = "rgb(128, 128, 128)"
+  }
+  ctx.fillText('Break The', 240 * scale, 80 * scale);
+  ctx.fillText('Brick', 240 * scale, 160 * scale);
+  ctx.closePath();
+  if (select < 0) {
+    select = 1;
+  }
+  if (select > 1) {
+    select = 0;
+  }
+  ctx.beginPath();
+  if (select == 0 && flashFrame % 2 == 0) {
+    ctx.fillStyle = "rgb(255, 252, 196)"
+  } else {
+    ctx.fillStyle = "rgb(64, 64, 64)"
+  }
+  ctx.roundRect(187 * scale, 193 * scale, 100 * scale, 40 * scale, 10 * scale).fill()
+  ctx.closePath();
+  ctx.beginPath();
+  if (select == 1 && flashFrame % 2 == 0) {
+    ctx.fillStyle = "rgb(255, 252, 196)"
+  } else {
+    ctx.fillStyle = "rgb(64, 64, 64)"
+  }
+  ctx.roundRect(187 * scale, 253 * scale, 100 * scale, 40 * scale, 10 * scale).fill()
+  ctx.beginPath();
+  if (select == 0 && flashFrame % 2 == 0) {
+    ctx.fillStyle = "rgb(250, 237, 9)"
+  } else {
+    ctx.fillStyle = "rgb(128, 128, 128)"
+  }
+  ctx.roundRect((240 - 50) * scale, 190 * scale, 100 * scale, 40 * scale, 10 * scale).fill();
+  ctx.closePath();
+  ctx.beginPath();
+  if (select == 1 && flashFrame % 2 == 0) {
+    ctx.fillStyle = "rgb(250, 237, 9)"
+  } else {
+    ctx.fillStyle = "rgb(128, 128, 128)"
+  }
+  ctx.roundRect((240 - 50) * scale, 250 * scale, 100 * scale, 40 * scale, 10 * scale).fill();
+  ctx.closePath();
+  ctx.beginPath();
+  if (select == 1 && flashFrame % 2 == 0) {
+    ctx.fillStyle = "rgb(250, 237, 9)"
+  } else {
+    ctx.fillStyle = "rgb(128, 128, 128)"
+  }
+  ctx.font = "bold " + 30 * scale + "px Comic Sans MS"
+  ctx.textAlign = "center"
+  ctx.fillText("Play", 240 * scale, 220 * scale)
+  ctx.closePath();
+  ctx.beginPath();
+  if (select == 0) {
+    ctx.fillStyle = "rgb(250, 237, 9)"
+  } else {
+    ctx.fillStyle = "rgb(128, 128, 128)"
+  }
+  ctx.font = "bold " + 20 * scale + "px Comic Sans MS"
+  ctx.textAlign = "center"
+  ctx.fillText("Settings", 240 * scale, 275 * scale)
+  ctx.closePath();
+  if (flashFrame < 20) {
+    if (isFlashPlaying == false) {
+      flash();
+    }
+  }
+  if (flashFrame == 20 && isChanging == false) {
+    setTimeout(levelChangeAnimate, 1000);
+    isChanging = true;
+  }
+
+
 }
 setInterval(log, 1000);
