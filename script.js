@@ -20,7 +20,7 @@ var pressedKeys = {}; //input checker
 var acceleration = 7 *
   scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 2; //current level
+var level = 0; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
