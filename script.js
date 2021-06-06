@@ -50,7 +50,6 @@ var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
 var blockhit = new Audio('blockhit.wav?raw=true');
 var rumble = new Audio('rumble.mp3?raw=true');
-}, false);
 var switchChange = new Audio('switch1.wav?raw=true');
 var switchHit = new Audio('switch2.wav?raw=true');
 var death = new Audio('death.wav?raw=true');
