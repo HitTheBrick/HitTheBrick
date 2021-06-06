@@ -91,7 +91,7 @@ var levels = [{
     color: [red, red, green],
     deadly: [true, true, false],
     functions: ["none", "none", "none"],
-    sounds: ["none", "none", "none"],
+    sounds: [death, death, blockhit],
     eNum: 3,
     startX: 240 * scale,
     startY: 240 * scale,
@@ -117,7 +117,7 @@ var levels = [{
       name: toggleBreak,
       properties: 1
     }, "none", "none", "none"],
-    sounds: ["none", "none", "none", "none"],
+    sounds: ["switch", death, blockhit, indestructibleHit],
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
@@ -487,7 +487,7 @@ function animate1() {
 }
 
 function hit(i) {
-  if (levels[level - 1].sounds[i] != "none") {
+  if (levels[level - 1].sounds[i] != "none" && levels[level - 1].sounds[i] != "switch") {
     levels[level - 1].sounds[i].play();
   }
   levels[level - 1].D[i] = levels[level - 1].D[i] + 1;
@@ -630,6 +630,7 @@ function changeLevel() {
 }
 
 function toggleBreak(index, i) {
+  switchChange.play();
   if (levels[level - 1].D[i] % 2 == 1) {
     breakBlock(index, i);
   } else {
@@ -638,17 +639,32 @@ function toggleBreak(index, i) {
 }
 
 function breakBlock(index, i) {
+  if(levels[level - 1].isBroke[index] != true) {
+    switchChange.play();
+  } else {
+    switchHit.play();
+  }
   levels[level - 1].isBroke[index] = true;
   changeColor(i, red);
 }
 
 function fixBlock(index, i) {
+  if(levels[level - 1].isBroke[index] != false) {
+    switchChange.play();
+  } else {
+    switchHit.play();
+  }
   levels[level - 1].D[index] = 0;
   levels[level - 1].isBroke[index] = false;
   changeColor(i, blue);
 }
 
 function changeColor(index, color) {
+  if(levels[level - 1].startColor[index] != color) {
+    switchChange.play();
+  } else {
+    switchHit.play();
+  }
   levels[level - 1].startColor[index] = color;
   levels[level - 1].color[index] = color;
 }
