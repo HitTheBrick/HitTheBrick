@@ -49,7 +49,7 @@ var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
 var levels = [{
     X: [220 * scale], //x position of box
-    Y: [140 * scale], //y position of box
+    Y: [160 * scale], //y position of box
     W: [40 * scale], //width of box
     H: [40 * scale], //height of box
     D: [0], //number of hits on box
@@ -106,7 +106,7 @@ var levels = [{
 		textColor: [white, white, darkGreen, darkGrey],
     color: [blue, red, green, grey],
     deadly: [false, true, false, false],
-    functions: [{name: breakBlock, properties: 1}, "none", "none", "none"],
+    functions: [{name: toggleBreak, properties: 1}, "none", "none", "none"],
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
@@ -212,13 +212,13 @@ function ImageCollection(list, callback) {
 
 var images = new ImageCollection([{
   name: "blue",
-  url: "blueblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueblock.png?raw=true"
 }, {
   name: "purple",
-  url: "purpleblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/purpleblock.png?raw=true"
 }, {
   name: "grey",
-  url: "greyblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/greyblock.png?raw=true"
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
@@ -480,7 +480,7 @@ function hit(i) {
   curEnt = i;
   if (levels[level - 1].functions[curEnt] != "none") {
     //window["func_" + levels[level - 1].functions[curEnt].name](levels[level - 1].functions[curEnt].properties)
-    levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties)
+    levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties, i);
   }
 
   balfade = 0;
@@ -614,14 +614,28 @@ function changeLevel() {
   level = levelChange;
 }
 
-
-function breakBlock(index) {
-  levels[level - 1].isBroke[index] = true;
+function toggleBreak(index, i) {
+	if(levels[level - 1].D[i] % 2 == 1) {
+		breakBlock(index, i);
+	} else {
+		fixBlock(index, i);
+	}
 }
 
-function fixBlock(index) {
+function breakBlock(index, i) {
+  levels[level - 1].isBroke[index] = true;
+	changeColor(i, red);
+}
+
+function fixBlock(index, i) {
   levels[level - 1].D[index] = 0;
   levels[level - 1].isBroke[index] = false;
+	changeColor(i, blue);
+}
+
+function changeColor(index, color) {
+	levels[level - 1].startColor[index] = color;
+	levels[level - 1].color[index] = color;
 }
 
 function animateText() {
@@ -640,7 +654,7 @@ function flash() {
   var speed = 30
   isFlashPlaying = true;
   flashFrame = flashFrame + 1;
-  console.log(flashFrame)
+  
   if (flashFrame > 15) {
     speed = speed + (flashFrame - 15) * 20;
   }
@@ -667,7 +681,7 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
 
 function log() {
 
-  console.log(consolelog);
+ 
 }
 
 function startScreen() {
