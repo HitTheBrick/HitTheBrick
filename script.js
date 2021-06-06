@@ -74,7 +74,7 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["wow you did it"],
+    winMessages: ["wow you ddd it"],
     deathMessages: ["you fucking cheater"]
   },
   {
