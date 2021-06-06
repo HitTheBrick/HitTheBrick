@@ -49,12 +49,7 @@ var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
 var blockhit = new Audio('blockhit.wav?raw=true');
-var rumble = new Audio('rumble.wav?raw=true');
-rumble.addEventListener('ended', function() {
-    if(isMoving == true) {
-      this.currentTime = 0;
-      this.play();
-    }
+var rumble = new Audio('rumble.mp3?raw=true');
 }, false);
 var switchChange = new Audio('switch1.wav?raw=true');
 var switchHit = new Audio('switch2.wav?raw=true');
@@ -557,6 +552,9 @@ function levelChangeAnimate() {
     ctx.fill();
     ctx.closePath();
     isMoving = true;
+    if(winAnimation > .8) {
+    	rumble.volume = 1 - (winAnimation - 0.8)*5
+    }
     rumble.play();
   }
   if (winAnimation >= 1 && winAnimation < 1.05) {
