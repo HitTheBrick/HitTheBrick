@@ -64,7 +64,7 @@ var levels = [{
     indicator: ["hp"],
     startColor: [green],
     hitColor: [lightGreen],
-		textColor: [darkGreen],
+    textColor: [darkGreen],
     color: [green],
     deadly: [false],
     functions: ["none"],
@@ -87,7 +87,7 @@ var levels = [{
     indicator: ["none", "none", "hp"],
     startColor: [red, red, green],
     hitColor: [lightRed, lightRed, lightGreen],
-		textColor: [white, white, darkGreen],
+    textColor: [white, white, darkGreen],
     color: [red, red, green],
     deadly: [true, true, false],
     functions: ["none", "none", "none"],
@@ -98,7 +98,7 @@ var levels = [{
     winMessages: ["win"],
     deathMessages: ["lose"]
   },
-	{
+  {
     X: [0, 220 * scale, 440 * scale, 0],
     Y: [140 * scale, 0, 140 * scale, 180 * scale],
     W: [40 * scale, 40 * scale, 40 * scale, 180 * scale],
@@ -110,10 +110,13 @@ var levels = [{
     indicator: ["none", "none", "hp", "none"],
     startColor: [blue, red, green, grey],
     hitColor: [lightBlue, lightRed, lightGreen, lightGrey],
-		textColor: [white, white, darkGreen, darkGrey],
+    textColor: [white, white, darkGreen, darkGrey],
     color: [blue, red, green, grey],
     deadly: [false, true, false, false],
-    functions: [{name: toggleBreak, properties: 1}, "none", "none", "none"],
+    functions: [{
+      name: toggleBreak,
+      properties: 1
+    }, "none", "none", "none"],
     sounds: ["none", "none", "none", "none"],
     eNum: 4,
     startX: 110 * scale,
@@ -121,7 +124,7 @@ var levels = [{
     winMessages: ["win"],
     deathMessages: ["lose"]
   },
-	
+
   /*{
     X: [0, (160 - 20) * scale, (320 - 20) * scale, (160 - 20) * scale],
     Y: [0, (160 - 20) * scale, (160 - 20) * scale, (200 - 20) * scale],
@@ -170,7 +173,7 @@ var levels = [{
     winMessages: ["wow i'm so proud of you\nyou did the first level", "that wasn't too\nhard right?", "i don't even know what\nto type on these lol", "you won, that's cool ig"],
     deathMessages: ["placeholder message"]
   },*/
-	
+
 
 ] //color variable for hit animation
 
@@ -339,7 +342,7 @@ function move() {
 
 function gameObjects() {
   if (level == 0) {
-		startScreen();
+    startScreen();
   } else if (typeof levels[level - 1] === "undefined") {
     level = 1;
   } else {
@@ -484,11 +487,12 @@ function animate1() {
 }
 
 function hit(i) {
-  levels[level - 1].D[i] = levels[level - 1].D[i] + 1;
-  curEnt = i;
-  if(levels[level - 1].sounds[i] != "none") {
+  if (levels[level - 1].sounds[i] != "none") {
     levels[level - 1].sounds[i].play();
   }
+  levels[level - 1].D[i] = levels[level - 1].D[i] + 1;
+  curEnt = i;
+
   if (levels[level - 1].functions[curEnt] != "none") {
     //window["func_" + levels[level - 1].functions[curEnt].name](levels[level - 1].functions[curEnt].properties)
     levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties, i);
@@ -626,27 +630,27 @@ function changeLevel() {
 }
 
 function toggleBreak(index, i) {
-	if(levels[level - 1].D[i] % 2 == 1) {
-		breakBlock(index, i);
-	} else {
-		fixBlock(index, i);
-	}
+  if (levels[level - 1].D[i] % 2 == 1) {
+    breakBlock(index, i);
+  } else {
+    fixBlock(index, i);
+  }
 }
 
 function breakBlock(index, i) {
   levels[level - 1].isBroke[index] = true;
-	changeColor(i, red);
+  changeColor(i, red);
 }
 
 function fixBlock(index, i) {
   levels[level - 1].D[index] = 0;
   levels[level - 1].isBroke[index] = false;
-	changeColor(i, blue);
+  changeColor(i, blue);
 }
 
 function changeColor(index, color) {
-	levels[level - 1].startColor[index] = color;
-	levels[level - 1].color[index] = color;
+  levels[level - 1].startColor[index] = color;
+  levels[level - 1].color[index] = color;
 }
 
 function animateText() {
@@ -665,7 +669,7 @@ function flash() {
   var speed = 30
   isFlashPlaying = true;
   flashFrame = flashFrame + 1;
-  
+
   if (flashFrame > 15) {
     speed = speed + (flashFrame - 15) * 20;
   }
@@ -692,7 +696,7 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
 
 function log() {
 
- 
+
 }
 
 function startScreen() {
