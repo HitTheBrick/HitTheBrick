@@ -626,6 +626,8 @@ function levelChangeAnimate() {
   } else {
     isChanging = false;
     isMoving = false;
+    rumble.pause();
+    rumble.currentTime = 0;
     y = levels[level - 1].startY;
     x = levels[level - 1].startX;
     dx = 0;
