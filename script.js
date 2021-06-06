@@ -47,6 +47,11 @@ var grey = "rgb(144, 144, 144)"
 var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
+var blockhit = new Audio('blockhit.wav?raw=true');
+var switchChange = new Audio('switch1.wav?raw=true');
+var switchHit = new Audio('switch2.wav?raw=true');
+var death = new Audio('death.wav?raw=true');
+var indestructibleHit = new Audio('hitindestructible.wav?raw=true');
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -63,6 +68,7 @@ var levels = [{
     color: [green],
     deadly: [false],
     functions: ["none"],
+    sounds: [blockhit],
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
@@ -85,6 +91,7 @@ var levels = [{
     color: [red, red, green],
     deadly: [true, true, false],
     functions: ["none", "none", "none"],
+    sounds: ["none", "none", "none"],
     eNum: 3,
     startX: 240 * scale,
     startY: 240 * scale,
@@ -107,6 +114,7 @@ var levels = [{
     color: [blue, red, green, grey],
     deadly: [false, true, false, false],
     functions: [{name: toggleBreak, properties: 1}, "none", "none", "none"],
+    sounds: ["none", "none", "none", "none"],
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
@@ -478,6 +486,9 @@ function animate1() {
 function hit(i) {
   levels[level - 1].D[i] = levels[level - 1].D[i] + 1;
   curEnt = i;
+  if(levels[level - 1].sounds[i] != "none") {
+    levels[level - 1].sounds[i].play();
+  }
   if (levels[level - 1].functions[curEnt] != "none") {
     //window["func_" + levels[level - 1].functions[curEnt].name](levels[level - 1].functions[curEnt].properties)
     levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties, i);
