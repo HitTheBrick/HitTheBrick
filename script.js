@@ -625,12 +625,13 @@ function levelChangeAnimate() {
     winAnimation += 0.01;
   } else {
     isChanging = false;
+    isMoving = false;
     y = levels[level - 1].startY;
     x = levels[level - 1].startX;
     dx = 0;
     dy = 0;
   }
-
+  
 }
 
 function changeLevel() {
