@@ -13,6 +13,7 @@ var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
 var select = 0;
+var isMoving = false;
 var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
@@ -48,6 +49,13 @@ var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
 var blockhit = new Audio('blockhit.wav?raw=true');
+var rumble = new Audio('rumble.wav?raw=true');
+rumble.addEventListener('ended', function() {
+    if(isMoving == true) {
+      this.currentTime = 0;
+      this.play();
+    }
+}, false);
 var switchChange = new Audio('switch1.wav?raw=true');
 var switchHit = new Audio('switch2.wav?raw=true');
 var death = new Audio('death.wav?raw=true');
@@ -548,16 +556,24 @@ function levelChangeAnimate() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fill();
     ctx.closePath();
+    isMoving = true;
+    rumble.play();
   }
   if (winAnimation >= 1 && winAnimation < 1.05) {
     winCoverMove = canvas.width;
+    
     if (level > 0) {
       changeLevel();
     } else {
       level = levelChange;
     }
+    isMoving = false;
+    rumble.pause();
+    rumble.currentTime = 0;
   }
   if (winAnimation >= 1.05) {
+    rumble.play();
+    isMoving = true;
     winCoverMove = canvas.width * (2 - (winAnimation - 0.05));
     ctx.beginPath();
     ctx.arc(levels[level - 1].startX, levels[level - 1].startY, radius, 0, Math.PI * 2);
