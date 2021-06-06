@@ -521,6 +521,7 @@ function gameWin() {
 }
 
 function gameOver() {
+  death.play();
   isChanging = true;
   pausex = x;
   pausey = y;
