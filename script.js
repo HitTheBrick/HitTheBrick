@@ -48,6 +48,7 @@ var grey = "rgb(144, 144, 144)"
 var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
+var music = new Audio('backgroundmusic.mp3?raw=true')
 var blockhit = new Audio('blockhit.wav?raw=true');
 var rumble = new Audio('rumble.mp3?raw=true');
 var switchChange = new Audio('switch1.wav?raw=true');
@@ -237,6 +238,10 @@ var images = new ImageCollection([{
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
 }]);
 
+music.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 window.onkeyup = function(e) {
@@ -263,7 +268,8 @@ window.onkeydown = function(e) {
 }
 
 window.onload = function() {
-
+	music.volume = 0.75
+	music.play();
   levelChange = level;
   dx = 0;
 
