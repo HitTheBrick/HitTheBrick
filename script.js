@@ -106,9 +106,9 @@ var levels = [{
     deathMessages: ["should've told you\nabout those"]
   },
   {
-    X: [0, 220 * scale, 440 * scale, 0],
-    Y: [140 * scale, 0, 140 * scale, 180 * scale],
-    W: [40 * scale, 40 * scale, 40 * scale, 180 * scale],
+    X: [0, 240 * scale, 440 * scale, 0],
+    Y: [120 * scale, 0, 120 * scale, 160 * scale],
+    W: [40 * scale, 40 * scale, 40 * scale, 200 * scale],
     H: [40 * scale, 480 * scale, 40 * scale, 40 * scale],
     D: [0, 0, 0, 0],
     isBroke: [false, false, false, false],
@@ -132,9 +132,9 @@ var levels = [{
     deathMessages: ["oof you loser"]
   },
   {
-    X: [0, 220 * scale, 440 * scale, 0, 200 * scale],
-    Y: [140 * scale, 0, 140 * scale, 180 * scale, 0],
-    W: [40 * scale, 40 * scale, 40 * scale, 180 * scale, 40 * scale],
+    X: [0, 240 * scale, 440 * scale, 0, 200 * scale],
+    Y: [120 * scale, 0, 120 * scale, 160 * scale, 0],
+    W: [40 * scale, 40 * scale, 40 * scale, 200 * scale, 40 * scale],
     H: [40 * scale, 480 * scale, 40 * scale, 40 * scale, 40 * scale],
     D: [0, 0, 0, 0, 0],
     isBroke: [true, false, false, false, false],
@@ -859,13 +859,12 @@ function toggleColor(object, i) {
 function fixBlock(index, i) {
   if (levels[level - 1].isBroke[index] != false) {
     switchChange.play();
-    changeColor(i, pink)
+    changeColor(i, pink);
   } else {
     switchHit.play();
   }
-  levels[level - 1].D[index] = 0;
   levels[level - 1].isBroke[index] = false;
-  changeColor(i, blue);
+	levels[level - 1].D[index] = 0;
 }
 
 function changeColor(index, color) {
