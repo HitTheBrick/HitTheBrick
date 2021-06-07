@@ -130,7 +130,7 @@ var levels = [{
     deathMessages: ["oof you loser"]
   },
   {
-    X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 400 * scale, 360 * scale, 320 * scale], //x position of box
+    X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 440 * scale, 360 * scale, 320 * scale], //x position of box
     Y: [40 * scale, 40 * scale, 0, 40 * scale, 80 * scale, 160 * scale, 120 * scale], //y position of box
     W: [80 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale], //width of box
     H: [40 * scale, 40 * scale, 40 * scale, 80 * scale, 120 * scale, 40 * scale, 40 * scale], //height of box
