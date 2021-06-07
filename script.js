@@ -14,6 +14,7 @@ var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
 var select = 0;
+var isBrokeCopy = [];
 var isMoving = false;
 var levelChange = 0;
 var isChanging = false;
@@ -331,6 +332,14 @@ window.onload = function() {
   if (level - 1 >= 0) {
     x = levels[level - 1].startX;
     y = levels[level - 1].startY;
+  }
+  if(level = 0){
+    var addition = 0;
+  } else {
+    var addition = 1;
+  }
+  for(k = 0; k > levels[level  - addition].isBroke.length; k++){
+    isBrokeCopy[k] = levels[level - addition].isBroke[k];
   }
   levelChange = level;
   dx = 0;
@@ -745,7 +754,7 @@ function levelChangeAnimate() {
 
 function changeLevel() {
   levels[level - 1].isBroke.forEach(function(part, index, theArray) {
-    theArray[index] = false;
+    theArray[index] = isBrokeCopy[index];
   });
   levels[level - 1].D.forEach(function(part, index, theArray) {
     theArray[index] = 0;
@@ -754,6 +763,9 @@ function changeLevel() {
     theArray[index] = levels[level - 1].startColor[index];
   });
   level = levelChange;
+  for(k = 0; k > levels[level - 1].isBroke.length; k++){
+    isBrokeCopy[k] = levels[level-1].isBroke[k];
+  }
 }
 
 function toggleBreak(index, i) {
