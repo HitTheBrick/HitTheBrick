@@ -50,13 +50,13 @@ var grey = "rgb(144, 144, 144)"
 var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
-var music = new Audio('backgroundmusic.mp3?raw=true')
-var blockhit = new Audio('blockhit.wav?raw=true');
-var rumble = new Audio('rumble.mp3?raw=true');
-var switchChange = new Audio('switch1.wav?raw=true');
-var switchHit = new Audio('switch2.wav?raw=true');
-var death = new Audio('death.wav?raw=true');
-var indestructibleHit = new Audio('hitindestructible.wav?raw=true');
+var music = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/backgroundmusic.mp3?raw=true')
+var blockhit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blockhit.wav?raw=true');
+var rumble = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/rumble.mp3?raw=true');
+var switchChange = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/switch1.wav?raw=true');
+var switchHit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/switch2.wav?raw=true');
+var death = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/death.wav?raw=true');
+var indestructibleHit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/hitindestructible.wav?raw=true');
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -136,17 +136,17 @@ var levels = [{
     H: [40 * scale, 40 * scale, 40 * scale, 80 * scale, 120 * scale, 40 * scale, 40 * scale, 80 * scale], //height of box
     D: [0, 0, 0, 0, 0, 0, 0, 0], //number of hits on box
     isBroke: [false, false, false, false, false, true, false, false, false],
-    strength: [3, 3, 3, 3, 3, 3, 3, 3],
+    strength: [3, 3, 3, 3, 3, 3, 3],
     breakable: [false, false, false, false, false, false, false, false, true],
     indicator: ["none", "none", "none", "none", "none", "none", "none", "none"],
-    startColor: [grey, red, blue, grey, grey, red, blue, grey],
+    startColor: [grey, red, blue, grey, grey, red, pink, grey],
     hitColor: [lightGrey, lightRed, lightBlue, lightGrey, lightGrey, lightRed, lightBlue, lightGrey],
     textColor: [darkGrey, darkRed, darkBlue, darkGrey, darkGrey, darkRed, darkBlue, darkGrey],
-    color: [grey, red, blue, grey, grey, red, blue, grey],
+    color: [grey, red, blue, grey, grey, red, pink, grey],
     deadly: [false, true, false, false, false, true, false, false],
     functions: ["none", "none", {
-      name: [toggleBreak, toggleBreak],
-      properties: [1, 5]
+      name: [toggleBreak, toggleBreak, toggleColor],
+      properties: [1, 5, {index: 6, color1: blue, color2: pink}]
     }, "none", "none", "none", {name: [breakBlock], properties: [5]}, "none"],
     sounds: [indestructibleHit, death, "switch", indestructibleHit, indestructibleHit, death, "switch", indestructibleHit],
     eNum: 8, //number of boxes
@@ -254,13 +254,13 @@ function ImageCollection(list, callback) {
 
 var images = new ImageCollection([{
   name: "blue",
-  url: "blueblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueblock.png?raw=true"
 }, {
   name: "purple",
-  url: "purpleblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/purpleblock.png?raw=true"
 }, {
   name: "grey",
-  url: "greyblock.png?raw=true"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/greyblock.png?raw=true"
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
@@ -399,7 +399,7 @@ function gameObjects() {
         let height = levels[level - 1].H[i];
         let curLevel = levels[level - 1]
         let damage = curLevel.D[i];
-
+				
 
         ctx.beginPath();
         if (curLevel.startColor[i].charAt(0) != "@") {
@@ -702,26 +702,54 @@ function changeLevel() {
 
 function toggleBreak(index, i) {
   switchChange.play();
+	switchChange.currentTime = 0;
+	if(levels[level-1].D[i] % 2 == 1) {
+		changeColor(i, pink);
+	} else {
+		changeColor(i, blue);
+	}
   if (levels[level - 1].isBroke[index] == false) {
-    breakBlock(index, i);
+    levels[level - 1].isBroke[index] = true;
   } else {
-    fixBlock(index, i);
+    levels[level - 1].D[index] = 0;
+    levels[level - 1].isBroke[index] = false;
   }
 }
 
 function breakBlock(index, i) {
   if (levels[level - 1].isBroke[index] != true) {
     switchChange.play();
+		changeColor(i, pink);
   } else {
     switchHit.play();
   }
   levels[level - 1].isBroke[index] = true;
-  changeColor(i, pink);
+  
+}
+
+function toggleColor(object, i) {
+  switchChange.play();
+	switchChange.currentTime = 0;
+	if(levels[level-1].D[i] % 2 == 1) {
+		changeColor(i, pink);
+	} else {
+		changeColor(i, blue);
+	}
+	console.log(object.color1)
+  if (levels[level - 1].startColor[object.index] == object.color1) {
+    levels[level - 1].startColor[object.index] = object.color2;
+		levels[level - 1].color[object.index] = object.color2;
+		console.log('dope')
+  } else {
+    levels[level - 1].startColor[object.index] = object.color1;
+    levels[level - 1].color[object.index] = object.color1;
+  }
 }
 
 function fixBlock(index, i) {
   if (levels[level - 1].isBroke[index] != false) {
     switchChange.play();
+		changeColor(i, pink)
   } else {
     switchHit.play();
   }
@@ -731,11 +759,7 @@ function fixBlock(index, i) {
 }
 
 function changeColor(index, color) {
-  if (levels[level - 1].startColor[index] != color) {
-    switchChange.play();
-  } else {
-    switchHit.play();
-  }
+  console.log(color);
   levels[level - 1].startColor[index] = color;
   levels[level - 1].color[index] = color;
 }
