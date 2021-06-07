@@ -22,7 +22,7 @@ var pressedKeys = {}; //input checker
 var acceleration = 7 *
   scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 4; //current level
+var level = 0; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
@@ -126,7 +126,7 @@ var levels = [{
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
-    winMessages: ["i haven't made\nmore levels yet"],
+    winMessages: ["the next level\nis incomplete"],
     deathMessages: ["oof you loser"]
   },
   {
