@@ -249,9 +249,7 @@ window.onkeyup = function(e) {
   pressedKeys[e.keyCode] = false;
 }
 window.onkeydown = function(e) {
-  if(musicPlaying == false) {
-    music.play();
-  }
+  
   pressedKeys[e.keyCode] = true;
   if (e.keyCode == 38 && levelChange == 0) {
     select = select - 1;
@@ -270,6 +268,11 @@ window.onkeydown = function(e) {
     }
   }
 }
+
+window.addEventListener('mousedown', e => {
+  music.volume = 0.75;
+  music.play();
+});
 
 window.onload = function() {
 	music.volume = 0.75
