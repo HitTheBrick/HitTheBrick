@@ -333,14 +333,15 @@ window.onload = function() {
     x = levels[level - 1].startX;
     y = levels[level - 1].startY;
   }
-  if(level = 0){
+  if (level == 0) {
     var addition = 0;
   } else {
     var addition = 1;
   }
-  for(k = 0; k > levels[level  - addition].isBroke.length; k++){
+  for (k = 0; k > levels[level - addition].isBroke.length; k++) {
     isBrokeCopy[k] = levels[level - addition].isBroke[k];
   }
+
   levelChange = level;
   dx = 0;
 
@@ -433,7 +434,7 @@ function gameObjects() {
         let height = levels[level - 1].H[i];
         let curLevel = levels[level - 1]
         let damage = curLevel.D[i];
-        
+
         ctx.beginPath();
         if (curLevel.startColor[i].charAt(0) != "@") {
           ctx.rect(xPos, yPos, width, height);
@@ -452,34 +453,34 @@ function gameObjects() {
             ctx.drawImage(images.get(curLevel.startColor[i].match(/[a-zA-Z]/g).join("")), xPos + (width / imageRepeat[0]) * (p % imageRepeat[0]), yPos + (height / imageRepeat[1]) * (Math.trunc(p / imageRepeat[0])), width / imageRepeat[0], height / imageRepeat[1]);
           }
         }
-				if (curLevel.functions[i] != "none") {
+        if (curLevel.functions[i] != "none") {
           if (curLevel.functions[i].name.includes(toggleBreak)) {
-						
+
             if (curLevel.startColor[i] == pink) {
               ctx.drawImage(images.get("pink switch"), xPos, yPos, width, height)
             }
-						if (curLevel.startColor[i] == blue) {
-							
+            if (curLevel.startColor[i] == blue) {
+
               ctx.drawImage(images.get("blue switch"), xPos, yPos, width, height)
             }
           }
-					if (curLevel.functions[i].name.includes(breakBlock)) {
-						
+          if (curLevel.functions[i].name.includes(breakBlock)) {
+
             if (curLevel.startColor[i] == pink) {
               ctx.drawImage(images.get("pink trash"), xPos, yPos, width, height)
             }
-						if (curLevel.startColor[i] == blue) {
-							
+            if (curLevel.startColor[i] == blue) {
+
               ctx.drawImage(images.get("blue trash"), xPos, yPos, width, height)
             }
           }
-					if (curLevel.functions[i].name.includes(fixBlock)) {
-						
+          if (curLevel.functions[i].name.includes(fixBlock)) {
+
             if (curLevel.startColor[i] == pink) {
               ctx.drawImage(images.get("pink fix"), xPos, yPos, width, height)
             }
-						if (curLevel.startColor[i] == blue) {
-							
+            if (curLevel.startColor[i] == blue) {
+
               ctx.drawImage(images.get("blue fix"), xPos, yPos, width, height)
             }
           }
@@ -664,7 +665,7 @@ function levelChangeAnimate() {
     isMoving = true;
     if (winAnimation > 0.9) {
       rumble.volume = 1 - (winAnimation - 0.9) * 10
-      console.log(rumble.volume);
+
     }
 
     rumble.play();
@@ -693,7 +694,7 @@ function levelChangeAnimate() {
     ctx.closePath();
     if (winAnimation > 1.95) {
       rumble.volume = Math.max(1 - (winAnimation - 1.95) * 10, 0);
-      console.log(rumble.volume);
+
     }
     rumble.play();
   }
@@ -753,6 +754,7 @@ function levelChangeAnimate() {
 }
 
 function changeLevel() {
+  
   levels[level - 1].isBroke.forEach(function(part, index, theArray) {
     theArray[index] = isBrokeCopy[index];
   });
@@ -762,9 +764,10 @@ function changeLevel() {
   levels[level - 1].color.forEach(function(part, index, theArray) {
     theArray[index] = levels[level - 1].startColor[index];
   });
+
   level = levelChange;
-  for(k = 0; k > levels[level - 1].isBroke.length; k++){
-    isBrokeCopy[k] = levels[level-1].isBroke[k];
+	for (i = 0; i < levels[level].isBroke.length; i++) {
+    isBrokeCopy[i] = levels[level].isBroke[i];
   }
 }
 
