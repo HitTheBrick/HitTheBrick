@@ -121,7 +121,7 @@ var levels = [{
     color: [blue, red, green, grey],
     deadly: [false, true, false, false],
     functions: [{
-      name: [toggleBreak],
+      name: [breakBlock],
       properties: [1]
     }, "none", "none", "none"],
     sounds: ["switch", death, blockhit, indestructibleHit],
