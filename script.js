@@ -132,6 +132,32 @@ var levels = [{
     deathMessages: ["oof you loser"]
   },
   {
+    X: [0, 220 * scale, 440 * scale, 0, 200 * scale],
+    Y: [140 * scale, 0, 140 * scale, 180 * scale, 0],
+    W: [40 * scale, 40 * scale, 40 * scale, 180 * scale, 40 * scale],
+    H: [40 * scale, 480 * scale, 40 * scale, 40 * scale, 40 * scale],
+    D: [0, 0, 0, 0, 0],
+    isBroke: [true, false, false, false, false],
+    strength: [0, 0, 5, 0, 0],
+    breakable: [false, false, true, false, false],
+    indicator: ["none", "none", "hp", "none", "none"],
+    startColor: [blue, red, green, grey, blue],
+    hitColor: [lightBlue, lightRed, lightGreen, lightGrey, lightBlue],
+    textColor: [white, white, darkGreen, darkGrey, white],
+    color: [blue, red, green, grey, blue],
+    deadly: [false, true, false, false, false],
+    functions: [{
+      name: [breakBlock],
+      properties: [1]
+    }, "none", "none", "none", {name: [fixBlock], properties: [0]}],
+    sounds: ["switch", death, blockhit, indestructibleHit, "switch"],
+    eNum: 5,
+    startX: 110 * scale,
+    startY: 240 * scale,
+    winMessages: ["i haven't made\nmore levels yet"],
+    deathMessages: ["oof you loser"]
+  },
+  {
     X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 440 * scale, 360 * scale, 320 * scale, 400 * scale], //x position of box
     Y: [40 * scale, 40 * scale, 0, 40 * scale, 80 * scale, 160 * scale, 120 * scale, 120 * scale], //y position of box
     W: [80 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale], //width of box
