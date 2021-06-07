@@ -15,6 +15,7 @@ var pausex = 0;
 var pausey = 0;
 var select = 0;
 var isBrokeCopy = [];
+var startColorCopy = [];
 var isMoving = false;
 var levelChange = 0;
 var isChanging = false;
@@ -422,9 +423,11 @@ function move() {
 
 function gameObjects() {
   if (level == 0) {
-		for (i = 0; i < levels[level].isBroke.length; i++) {
+    for (i = 0; i < levels[level].isBroke.length; i++) {
       isBrokeCopy[i] = levels[level].isBroke[i];
-			
+    }
+    for (i = 0; i < levels[level].startColor.length; i++) {
+      startColorCopy[i] = levels[level].startColor[i];
     }
     startScreen();
   } else if (typeof levels[level - 1] === "undefined") {
@@ -765,6 +768,9 @@ function changeLevel() {
   levels[level - 1].D.forEach(function(part, index, theArray) {
     theArray[index] = 0;
   });
+  levels[level - 1].startColor.forEach(function(part, index, theArray) {
+    theArray[index] = startColorCopy[index];
+  });
   levels[level - 1].color.forEach(function(part, index, theArray) {
     theArray[index] = levels[level - 1].startColor[index];
   });
@@ -772,6 +778,9 @@ function changeLevel() {
   level = levelChange;
   for (i = 0; i < levels[level - 1].isBroke.length; i++) {
     isBrokeCopy[i] = levels[level - 1].isBroke[i];
+  }
+  for (i = 0; i < levels[level - 1].startColor.length; i++) {
+    startColorCopy[i] = levels[level - 1].startColor[i];
   }
 }
 
