@@ -540,6 +540,7 @@ function gameOver() {
 }
 
 function levelChangeAnimate() {
+	rumble.volume = 1;
   var txt = levelChangeText;
   var scaleText = 0;
   var txtlength = [];
@@ -551,12 +552,15 @@ function levelChangeAnimate() {
     ctx.fill();
     ctx.closePath();
     isMoving = true;
-    if(winAnimation > .8) {
-    	rumble.volume = 1 - (winAnimation - 0.8)*5
+    if(winAnimation > 0.9) {
+    	rumble.volume = 1 - (winAnimation - 0.9)*10
+			console.log(rumble.volume);
     }
+		
     rumble.play();
   }
   if (winAnimation >= 1 && winAnimation < 1.05) {
+		rumble.volume = 1;
     winCoverMove = canvas.width;
     
     if (level > 0) {
@@ -569,7 +573,7 @@ function levelChangeAnimate() {
     rumble.currentTime = 0;
   }
   if (winAnimation >= 1.05) {
-    rumble.play();
+    
     isMoving = true;
     winCoverMove = canvas.width * (2 - (winAnimation - 0.05));
     ctx.beginPath();
@@ -577,6 +581,11 @@ function levelChangeAnimate() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fill();
     ctx.closePath();
+		if(winAnimation > 1.95) {
+    	rumble.volume = Math.max(1 - (winAnimation - 1.95)*10, 0);
+			console.log(rumble.volume);
+    }
+		rumble.play();
   }
   ctx.beginPath();
   ctx.fillStyle = levelChangeColor[0];
