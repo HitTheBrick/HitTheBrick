@@ -9,7 +9,7 @@ var dx = 0;
 var dy = 0;
 var musicPlaying = false;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
-var levelChangeText = "GO"
+var levelChangeText = "let's go"
 var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
@@ -119,14 +119,14 @@ var levels = [{
     color: [blue, red, green, grey],
     deadly: [false, true, false, false],
     functions: [{
-      name: toggleBreak,
-      properties: 1
+      name: [toggleBreak],
+      properties: [1]
     }, "none", "none", "none"],
     sounds: ["switch", death, blockhit, indestructibleHit],
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
-    winMessages: ["the next level\nis incomplete"],
+    winMessages: ["i haven't made\nmore levels yet"],
     deathMessages: ["oof you loser"]
   },
   {
@@ -146,8 +146,15 @@ var levels = [{
     deadly: [false, true, false, false, false, true, false, false],
     functions: ["none", "none", {
       name: [toggleBreak, toggleBreak, toggleColor],
-      properties: [1, 5, {index: 6, color1: blue, color2: pink}]
-    }, "none", "none", "none", {name: [breakBlock], properties: [5]}, "none"],
+      properties: [1, 5, {
+        index: 6,
+        color1: blue,
+        color2: pink
+      }]
+    }, "none", "none", "none", {
+      name: [breakBlock],
+      properties: [5]
+    }, "none"],
     sounds: [indestructibleHit, death, "switch", indestructibleHit, indestructibleHit, death, "switch", indestructibleHit],
     eNum: 8, //number of boxes
     startX: 460 * scale,
@@ -264,7 +271,25 @@ var images = new ImageCollection([{
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
-}]);
+}, {
+  name: "pink switch",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinkswitch.png?raw=true"
+}, {
+  name: "blue switch",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueswitch.png?raw=true"
+}, {
+  name: "pink trash",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinktrash.png?raw=true"
+}, {
+  name: "blue trash",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/bluetrash.png?raw=true"
+}, {
+  name: "pink fix",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinkfix.png?raw=true"
+}, {
+  name: "blue fix",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/bluefix.png?raw=true"
+}, ]);
 
 music.addEventListener('ended', function() {
   this.currentTime = 0;
@@ -399,8 +424,7 @@ function gameObjects() {
         let height = levels[level - 1].H[i];
         let curLevel = levels[level - 1]
         let damage = curLevel.D[i];
-				
-
+        
         ctx.beginPath();
         if (curLevel.startColor[i].charAt(0) != "@") {
           ctx.rect(xPos, yPos, width, height);
@@ -417,6 +441,38 @@ function gameObjects() {
 
           for (p = 0; p < imageRepeat[0] * imageRepeat[1]; p++) {
             ctx.drawImage(images.get(curLevel.startColor[i].match(/[a-zA-Z]/g).join("")), xPos + (width / imageRepeat[0]) * (p % imageRepeat[0]), yPos + (height / imageRepeat[1]) * (Math.trunc(p / imageRepeat[0])), width / imageRepeat[0], height / imageRepeat[1]);
+          }
+        }
+				if (curLevel.functions[i] != "none") {
+          if (curLevel.functions[i].name.includes(toggleBreak)) {
+						
+            if (curLevel.startColor[i] == pink) {
+              ctx.drawImage(images.get("pink switch"), xPos, yPos, width, height)
+            }
+						if (curLevel.startColor[i] == blue) {
+							
+              ctx.drawImage(images.get("blue switch"), xPos, yPos, width, height)
+            }
+          }
+					if (curLevel.functions[i].name.includes(breakBlock)) {
+						
+            if (curLevel.startColor[i] == pink) {
+              ctx.drawImage(images.get("pink trash"), xPos, yPos, width, height)
+            }
+						if (curLevel.startColor[i] == blue) {
+							
+              ctx.drawImage(images.get("blue trash"), xPos, yPos, width, height)
+            }
+          }
+					if (curLevel.functions[i].name.includes(fixBlock)) {
+						
+            if (curLevel.startColor[i] == pink) {
+              ctx.drawImage(images.get("pink fix"), xPos, yPos, width, height)
+            }
+						if (curLevel.startColor[i] == blue) {
+							
+              ctx.drawImage(images.get("blue fix"), xPos, yPos, width, height)
+            }
           }
         }
         ctx.font = "bold " + 20 * scale + "px Comic Sans MS";
@@ -702,12 +758,12 @@ function changeLevel() {
 
 function toggleBreak(index, i) {
   switchChange.play();
-	switchChange.currentTime = 0;
-	if(levels[level-1].D[i] % 2 == 1) {
-		changeColor(i, pink);
-	} else {
-		changeColor(i, blue);
-	}
+  switchChange.currentTime = 0;
+  if (levels[level - 1].D[i] % 2 == 1) {
+    changeColor(i, pink);
+  } else {
+    changeColor(i, blue);
+  }
   if (levels[level - 1].isBroke[index] == false) {
     levels[level - 1].isBroke[index] = true;
   } else {
@@ -719,27 +775,27 @@ function toggleBreak(index, i) {
 function breakBlock(index, i) {
   if (levels[level - 1].isBroke[index] != true) {
     switchChange.play();
-		changeColor(i, pink);
+    changeColor(i, pink);
   } else {
     switchHit.play();
   }
   levels[level - 1].isBroke[index] = true;
-  
+
 }
 
 function toggleColor(object, i) {
   switchChange.play();
-	switchChange.currentTime = 0;
-	if(levels[level-1].D[i] % 2 == 1) {
-		changeColor(i, pink);
-	} else {
-		changeColor(i, blue);
-	}
-	console.log(object.color1)
+  switchChange.currentTime = 0;
+  if (levels[level - 1].D[i] % 2 == 1) {
+    changeColor(i, pink);
+  } else {
+    changeColor(i, blue);
+  }
+  console.log(object.color1)
   if (levels[level - 1].startColor[object.index] == object.color1) {
     levels[level - 1].startColor[object.index] = object.color2;
-		levels[level - 1].color[object.index] = object.color2;
-		console.log('dope')
+    levels[level - 1].color[object.index] = object.color2;
+    console.log('dope')
   } else {
     levels[level - 1].startColor[object.index] = object.color1;
     levels[level - 1].color[object.index] = object.color1;
@@ -749,7 +805,7 @@ function toggleColor(object, i) {
 function fixBlock(index, i) {
   if (levels[level - 1].isBroke[index] != false) {
     switchChange.play();
-		changeColor(i, pink)
+    changeColor(i, pink)
   } else {
     switchHit.play();
   }
