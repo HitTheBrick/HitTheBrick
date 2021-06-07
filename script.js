@@ -422,6 +422,10 @@ function move() {
 
 function gameObjects() {
   if (level == 0) {
+		for (i = 0; i < levels[level].isBroke.length; i++) {
+      isBrokeCopy[i] = levels[level].isBroke[i];
+			
+    }
     startScreen();
   } else if (typeof levels[level - 1] === "undefined") {
     level = 1;
@@ -766,8 +770,8 @@ function changeLevel() {
   });
 
   level = levelChange;
-	for (i = 0; i < levels[level].isBroke.length; i++) {
-    isBrokeCopy[i] = levels[level].isBroke[i];
+  for (i = 0; i < levels[level - 1].isBroke.length; i++) {
+    isBrokeCopy[i] = levels[level - 1].isBroke[i];
   }
 }
 
