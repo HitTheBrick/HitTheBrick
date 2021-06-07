@@ -22,7 +22,7 @@ var pressedKeys = {}; //input checker
 var acceleration = 7 *
   scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 0; //current level
+var level = 4; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
@@ -38,6 +38,7 @@ var started = false;
 var consolelog;
 var darkBlue = "rgb(34, 39, 122)"
 var blue = "rgb(102, 102, 255)"
+var pink = "rgb(255, 102, 207)"
 var lightBlue = "rgb(102, 204, 255)"
 var green = "rgb(8, 242, 110)"
 var darkGreen = "rgb(6, 125, 58)"
@@ -127,6 +128,32 @@ var levels = [{
     startY: 240 * scale,
     winMessages: ["i haven't made\nmore levels yet"],
     deathMessages: ["oof you loser"]
+  },
+  {
+    X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 400 * scale, 360 * scale, 320 * scale], //x position of box
+    Y: [40 * scale, 40 * scale, 0, 40 * scale, 80 * scale, 160 * scale, 120 * scale], //y position of box
+    W: [80 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale], //width of box
+    H: [40 * scale, 40 * scale, 40 * scale, 80 * scale, 120 * scale, 40 * scale, 40 * scale], //height of box
+    D: [0, 0, 0, 0, 0, 0, 0], //number of hits on box
+    isBroke: [false, false, false, false, false, true, false, false],
+    strength: [3, 3, 3, 3, 3, 3, 3],
+    breakable: [false, false, false, false, false, false, false, true],
+    indicator: ["none", "none", "none", "none", "none", "none", "none"],
+    startColor: [grey, red, blue, grey, grey, red, blue],
+    hitColor: [lightGrey, lightRed, lightBlue, lightGrey, lightGrey, lightRed, lightBlue],
+    textColor: [darkGrey, darkRed, darkBlue, darkGrey, darkGrey, darkRed, darkBlue],
+    color: [grey, red, blue, grey, grey, red, blue],
+    deadly: [false, true, false, false, false, true, false],
+    functions: ["none", "none", {
+      name: [toggleBreak, toggleBreak],
+      properties: [1, 5]
+    }, "none", "none", "none", {name: [breakBlock], properties: [5]}],
+    sounds: [indestructibleHit, death, "switch", indestructibleHit, indestructibleHit, death, "switch"],
+    eNum: 7, //number of boxes
+    startX: 460 * scale,
+    startY: 20 * scale,
+    winMessages: ["wow you're smart"],
+    deathMessages: ["how are you going\nto get past that?"]
   },
 
   /*{
@@ -240,8 +267,8 @@ var images = new ImageCollection([{
 }]);
 
 music.addEventListener('ended', function() {
-    this.currentTime = 0;
-    this.play();
+  this.currentTime = 0;
+  this.play();
 }, false);
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -249,7 +276,7 @@ window.onkeyup = function(e) {
   pressedKeys[e.keyCode] = false;
 }
 window.onkeydown = function(e) {
-  
+
   pressedKeys[e.keyCode] = true;
   if (e.keyCode == 38 && levelChange == 0) {
     select = select - 1;
@@ -275,8 +302,11 @@ window.addEventListener('mousedown', e => {
 });
 
 window.onload = function() {
-	music.volume = 0.75
-	
+  music.volume = 0.75
+  if (level - 1 >= 0) {
+    x = levels[level - 1].startX;
+    y = levels[level - 1].startY;
+  }
   levelChange = level;
   dx = 0;
 
@@ -510,7 +540,9 @@ function hit(i) {
 
   if (levels[level - 1].functions[curEnt] != "none") {
     //window["func_" + levels[level - 1].functions[curEnt].name](levels[level - 1].functions[curEnt].properties)
-    levels[level - 1].functions[curEnt].name(levels[level - 1].functions[curEnt].properties, i);
+    for (u = 0; u < levels[level - 1].functions[curEnt].name.length; u++) {
+      levels[level - 1].functions[curEnt].name[u](levels[level - 1].functions[curEnt].properties[u], i);
+    }
   }
 
   balfade = 0;
@@ -553,7 +585,7 @@ function gameOver() {
 }
 
 function levelChangeAnimate() {
-	rumble.volume = 1;
+  rumble.volume = 1;
   var txt = levelChangeText;
   var scaleText = 0;
   var txtlength = [];
@@ -565,17 +597,17 @@ function levelChangeAnimate() {
     ctx.fill();
     ctx.closePath();
     isMoving = true;
-    if(winAnimation > 0.9) {
-    	rumble.volume = 1 - (winAnimation - 0.9)*10
-			console.log(rumble.volume);
+    if (winAnimation > 0.9) {
+      rumble.volume = 1 - (winAnimation - 0.9) * 10
+      console.log(rumble.volume);
     }
-		
+
     rumble.play();
   }
   if (winAnimation >= 1 && winAnimation < 1.05) {
-		rumble.volume = 1;
+    rumble.volume = 1;
     winCoverMove = canvas.width;
-    
+
     if (level > 0) {
       changeLevel();
     } else {
@@ -586,7 +618,7 @@ function levelChangeAnimate() {
     rumble.currentTime = 0;
   }
   if (winAnimation >= 1.05) {
-    
+
     isMoving = true;
     winCoverMove = canvas.width * (2 - (winAnimation - 0.05));
     ctx.beginPath();
@@ -594,11 +626,11 @@ function levelChangeAnimate() {
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fill();
     ctx.closePath();
-		if(winAnimation > 1.95) {
-    	rumble.volume = Math.max(1 - (winAnimation - 1.95)*10, 0);
-			console.log(rumble.volume);
+    if (winAnimation > 1.95) {
+      rumble.volume = Math.max(1 - (winAnimation - 1.95) * 10, 0);
+      console.log(rumble.volume);
     }
-		rumble.play();
+    rumble.play();
   }
   ctx.beginPath();
   ctx.fillStyle = levelChangeColor[0];
@@ -652,7 +684,7 @@ function levelChangeAnimate() {
     dx = 0;
     dy = 0;
   }
-  
+
 }
 
 function changeLevel() {
@@ -670,7 +702,7 @@ function changeLevel() {
 
 function toggleBreak(index, i) {
   switchChange.play();
-  if (levels[level - 1].D[i] % 2 == 1) {
+  if (levels[level - 1].isBroke[index] == false) {
     breakBlock(index, i);
   } else {
     fixBlock(index, i);
@@ -678,17 +710,17 @@ function toggleBreak(index, i) {
 }
 
 function breakBlock(index, i) {
-  if(levels[level - 1].isBroke[index] != true) {
+  if (levels[level - 1].isBroke[index] != true) {
     switchChange.play();
   } else {
     switchHit.play();
   }
   levels[level - 1].isBroke[index] = true;
-  changeColor(i, red);
+  changeColor(i, pink);
 }
 
 function fixBlock(index, i) {
-  if(levels[level - 1].isBroke[index] != false) {
+  if (levels[level - 1].isBroke[index] != false) {
     switchChange.play();
   } else {
     switchHit.play();
@@ -699,7 +731,7 @@ function fixBlock(index, i) {
 }
 
 function changeColor(index, color) {
-  if(levels[level - 1].startColor[index] != color) {
+  if (levels[level - 1].startColor[index] != color) {
     switchChange.play();
   } else {
     switchHit.play();
