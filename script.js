@@ -52,13 +52,13 @@ var grey = "rgb(144, 144, 144)"
 var lightGrey = "rgb(212, 212, 212)"
 var darkGrey = "rgb(72, 72, 72)"
 var white = "white"
-var music = new Audio('backgroundmusic.mp3')
-var blockhit = new Audio('blockhit.wav');
-var rumble = new Audio('rumble.mp3');
-var switchChange = new Audio('switch1.wav');
-var switchHit = new Audio('switch2.wav');
-var death = new Audio('death.wav');
-var indestructibleHit = new Audio('hitindestructible.wav');
+var music = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/backgroundmusic.mp3?raw=true')
+var blockhit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blockhit.wav?raw=true');
+var rumble = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/rumble.mp3?raw=true');
+var switchChange = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/switch1.wav?raw=true');
+var switchHit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/switch2.wav?raw=true');
+var death = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/death.wav?raw=true');
+var indestructibleHit = new Audio('https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/hitindestructible.wav?raw=true');
 var levels = [{
     X: [220 * scale], //x position of box
     Y: [160 * scale], //y position of box
@@ -289,34 +289,34 @@ function ImageCollection(list, callback) {
 
 var images = new ImageCollection([{
   name: "blue",
-  url: "blueblock.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueblock.png?raw=true"
 }, {
   name: "purple",
-  url: "purpleblock.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/purpleblock.png?raw=true"
 }, {
   name: "grey",
-  url: "greyblock.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/greyblock.png?raw=true"
 }, {
   name: "bongo cat",
   url: "https://i.pinimg.com/originals/46/9e/e2/469ee2b818c5a9e57ac1f730970b4372.png"
 }, {
   name: "pink switch",
-  url: "pinkswitch.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinkswitch.png?raw=true"
 }, {
   name: "blue switch",
-  url: "blueswitch.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/blueswitch.png?raw=true"
 }, {
   name: "pink trash",
-  url: "pinktrash.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinktrash.png?raw=true"
 }, {
   name: "blue trash",
-  url: "bluetrash.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/bluetrash.png?raw=true"
 }, {
   name: "pink fix",
-  url: "pinkfix.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/pinkfix.png?raw=true"
 }, {
   name: "blue fix",
-  url: "bluefix.png"
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/bluefix.png?raw=true"
 }, ]);
 
 music.addEventListener('ended', function() {
