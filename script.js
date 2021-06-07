@@ -130,26 +130,26 @@ var levels = [{
     deathMessages: ["oof you loser"]
   },
   {
-    X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 440 * scale, 360 * scale, 320 * scale], //x position of box
-    Y: [40 * scale, 40 * scale, 0, 40 * scale, 80 * scale, 160 * scale, 120 * scale], //y position of box
-    W: [80 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale], //width of box
-    H: [40 * scale, 40 * scale, 40 * scale, 80 * scale, 120 * scale, 40 * scale, 40 * scale], //height of box
-    D: [0, 0, 0, 0, 0, 0, 0], //number of hits on box
-    isBroke: [false, false, false, false, false, true, false, false],
-    strength: [3, 3, 3, 3, 3, 3, 3],
-    breakable: [false, false, false, false, false, false, false, true],
-    indicator: ["none", "none", "none", "none", "none", "none", "none"],
-    startColor: [grey, red, blue, grey, grey, red, blue],
-    hitColor: [lightGrey, lightRed, lightBlue, lightGrey, lightGrey, lightRed, lightBlue],
-    textColor: [darkGrey, darkRed, darkBlue, darkGrey, darkGrey, darkRed, darkBlue],
-    color: [grey, red, blue, grey, grey, red, blue],
-    deadly: [false, true, false, false, false, true, false],
+    X: [400 * scale, 360 * scale, 320 * scale, 320 * scale, 440 * scale, 360 * scale, 320 * scale, 400 * scale], //x position of box
+    Y: [40 * scale, 40 * scale, 0, 40 * scale, 80 * scale, 160 * scale, 120 * scale, 120 * scale], //y position of box
+    W: [80 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale, 40 * scale], //width of box
+    H: [40 * scale, 40 * scale, 40 * scale, 80 * scale, 120 * scale, 40 * scale, 40 * scale, 80 * scale], //height of box
+    D: [0, 0, 0, 0, 0, 0, 0, 0], //number of hits on box
+    isBroke: [false, false, false, false, false, true, false, false, false],
+    strength: [3, 3, 3, 3, 3, 3, 3, 3],
+    breakable: [false, false, false, false, false, false, false, false, true],
+    indicator: ["none", "none", "none", "none", "none", "none", "none", "none"],
+    startColor: [grey, red, blue, grey, grey, red, blue, grey],
+    hitColor: [lightGrey, lightRed, lightBlue, lightGrey, lightGrey, lightRed, lightBlue, lightGrey],
+    textColor: [darkGrey, darkRed, darkBlue, darkGrey, darkGrey, darkRed, darkBlue, darkGrey],
+    color: [grey, red, blue, grey, grey, red, blue, grey],
+    deadly: [false, true, false, false, false, true, false, false],
     functions: ["none", "none", {
       name: [toggleBreak, toggleBreak],
       properties: [1, 5]
-    }, "none", "none", "none", {name: [breakBlock], properties: [5]}],
-    sounds: [indestructibleHit, death, "switch", indestructibleHit, indestructibleHit, death, "switch"],
-    eNum: 7, //number of boxes
+    }, "none", "none", "none", {name: [breakBlock], properties: [5]}, "none"],
+    sounds: [indestructibleHit, death, "switch", indestructibleHit, indestructibleHit, death, "switch", indestructibleHit],
+    eNum: 8, //number of boxes
     startX: 460 * scale,
     startY: 20 * scale,
     winMessages: ["wow you're smart"],
