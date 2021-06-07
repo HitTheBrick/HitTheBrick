@@ -76,7 +76,7 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["wow you beat the first level"],
+    winMessages: ["wow you beat the\nfirst level"],
     deathMessages: ["impossible"]
   },
   {
