@@ -125,7 +125,7 @@ var levels = [{
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
-    winMessages: ["i haven't really made anymore\nlevels after this so\nyou get the first level again"],
+    winMessages: ["i haven't made\nmore levels yet"],
     deathMessages: ["oof you loser"]
   },
 
