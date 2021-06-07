@@ -76,8 +76,8 @@ var levels = [{
     eNum: 1, //number of boxes
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["wow you ddd it"],
-    deathMessages: ["you fucking cheater"]
+    winMessages: ["wow you beat the first level"],
+    deathMessages: ["impossible"]
   },
   {
     X: [0, 300 * scale, 0],
@@ -99,8 +99,8 @@ var levels = [{
     eNum: 3,
     startX: 240 * scale,
     startY: 240 * scale,
-    winMessages: ["win"],
-    deathMessages: ["lose"]
+    winMessages: ["did you figure out what the\nred blocks do?"],
+    deathMessages: ["should've told you\nabout those"]
   },
   {
     X: [0, 220 * scale, 440 * scale, 0],
@@ -125,8 +125,8 @@ var levels = [{
     eNum: 4,
     startX: 110 * scale,
     startY: 240 * scale,
-    winMessages: ["win"],
-    deathMessages: ["lose"]
+    winMessages: ["i haven't really made anymore\nlevels after this so\nyou get the first level again"],
+    deathMessages: ["oof you loser"]
   },
 
   /*{
