@@ -7,6 +7,7 @@ var x = 110 * scale; //starting position x
 var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var dy = 0;
+var musicPlaying = false;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
 var levelChangeText = "let's go"
 var imageRepeat = [];
@@ -248,6 +249,9 @@ window.onkeyup = function(e) {
   pressedKeys[e.keyCode] = false;
 }
 window.onkeydown = function(e) {
+  if(musicPlaying == false) {
+    music.play();
+  }
   pressedKeys[e.keyCode] = true;
   if (e.keyCode == 38 && levelChange == 0) {
     select = select - 1;
@@ -269,7 +273,7 @@ window.onkeydown = function(e) {
 
 window.onload = function() {
 	music.volume = 0.75
-	music.play();
+	
   levelChange = level;
   dx = 0;
 
