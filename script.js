@@ -375,8 +375,8 @@ canvas.addEventListener("mouseup", function(e) {
   if (Math.sqrt(((mouseLocation[0] - click[0]) / 10 * scale) ** 2 + ((mouseLocation[1] - click[1]) / 10 * scale) ** 2) >= 2 * scale) {
     getMousePosition(canvas, e);
     isClicked = false;
-    dx = (mouseLocation[0] - click[0]) / 10 * scale;
-    dy = (mouseLocation[1] - click[1]) / 10 * scale;
+    dx = ((mouseLocation[0] - click[0]) / 50) * scale;
+    dy = ((mouseLocation[1] - click[1]) / 50) * scale;
     if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
       moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
     }
