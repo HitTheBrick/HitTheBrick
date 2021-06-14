@@ -30,7 +30,7 @@ var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
-var acceleration = 7 * scale; //acceleration of character
+var acceleration = 4 * scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
 var level = 1; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
@@ -276,6 +276,41 @@ To make a new level, copy the following format into a new line on the levels var
 	
 */
 
+function touchHandler(event)
+{
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+    switch(event.type)
+    {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type = "mousemove"; break;        
+        case "touchend":   type = "mouseup";   break;
+        default:           return;
+    }
+
+    // initMouseEvent(type, canBubble, cancelable, view, clickCount, 
+    //                screenX, screenY, clientX, clientY, ctrlKey, 
+    //                altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1, 
+                                  first.screenX, first.screenY, 
+                                  first.clientX, first.clientY, false, 
+                                  false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+}
+
+function init() 
+{
+    document.addEventListener("touchstart", touchHandler, true);
+    document.addEventListener("touchmove", touchHandler, true);
+    document.addEventListener("touchend", touchHandler, true);
+    document.addEventListener("touchcancel", touchHandler, true);    
+}
+
 function ImageCollection(list, callback) {
   var total = 0,
     images = {}; //private :)
@@ -368,7 +403,7 @@ window.addEventListener('mousedown', e => {
 });
 
 canvas.addEventListener("mousedown", function(e) {
-  if (isClicked == false) {
+  if (isClicked == false) {https://jsfiddle.net/illjsfiddleyourpickle/oLq3vxer/1089/#
     click = getMousePosition(canvas, e);
     isClicked = true;
   }
@@ -391,6 +426,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 
 window.onload = function() {
+	init();
   music.volume = 0.75
   if (level - 1 >= 0) {
     x = levels[level - 1].startX;
