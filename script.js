@@ -276,39 +276,43 @@ To make a new level, copy the following format into a new line on the levels var
 	
 */
 
-function touchHandler(event)
-{
-    var touches = event.changedTouches,
-        first = touches[0],
-        type = "";
-    switch(event.type)
-    {
-        case "touchstart": type = "mousedown"; break;
-        case "touchmove":  type = "mousemove"; break;        
-        case "touchend":   type = "mouseup";   break;
-        default:           return;
-    }
+function touchHandler(event) {
+  var touches = event.changedTouches,
+    first = touches[0],
+    type = "";
+  switch (event.type) {
+    case "touchstart":
+      type = "mousedown";
+      break;
+    case "touchmove":
+      type = "mousemove";
+      break;
+    case "touchend":
+      type = "mouseup";
+      break;
+    default:
+      return;
+  }
 
-    // initMouseEvent(type, canBubble, cancelable, view, clickCount, 
-    //                screenX, screenY, clientX, clientY, ctrlKey, 
-    //                altKey, shiftKey, metaKey, button, relatedTarget);
+  // initMouseEvent(type, canBubble, cancelable, view, clickCount, 
+  //                screenX, screenY, clientX, clientY, ctrlKey, 
+  //                altKey, shiftKey, metaKey, button, relatedTarget);
 
-    var simulatedEvent = document.createEvent("MouseEvent");
-    simulatedEvent.initMouseEvent(type, true, true, window, 1, 
-                                  first.screenX, first.screenY, 
-                                  first.clientX, first.clientY, false, 
-                                  false, false, false, 0/*left*/, null);
+  var simulatedEvent = document.createEvent("MouseEvent");
+  simulatedEvent.initMouseEvent(type, true, true, window, 1,
+    first.screenX, first.screenY,
+    first.clientX, first.clientY, false,
+    false, false, false, 0 /*left*/ , null);
 
-    first.target.dispatchEvent(simulatedEvent);
-    event.preventDefault();
+  first.target.dispatchEvent(simulatedEvent);
+  event.preventDefault();
 }
 
-function init() 
-{
-    document.addEventListener("touchstart", touchHandler, true);
-    document.addEventListener("touchmove", touchHandler, true);
-    document.addEventListener("touchend", touchHandler, true);
-    document.addEventListener("touchcancel", touchHandler, true);    
+function init() {
+  document.addEventListener("touchstart", touchHandler, true);
+  document.addEventListener("touchmove", touchHandler, true);
+  document.addEventListener("touchend", touchHandler, true);
+  document.addEventListener("touchcancel", touchHandler, true);
 }
 
 function ImageCollection(list, callback) {
@@ -403,22 +407,23 @@ window.addEventListener('mousedown', e => {
 });
 
 canvas.addEventListener("mousedown", function(e) {
-  if (isClicked == false) {https://jsfiddle.net/illjsfiddleyourpickle/oLq3vxer/1089/#
-    click = getMousePosition(canvas, e);
+  if (isClicked == false) {
+    https: //jsfiddle.net/illjsfiddleyourpickle/oLq3vxer/1089/#
+      click = getMousePosition(canvas, e);
     isClicked = true;
   }
 });
 window.addEventListener("mouseup", function(e) {
-    getMousePosition(canvas, e);
-    isClicked = false;
-    dx = ((mouseLocation[0] - click[0])/sensitivity*scale);
-    dy = ((mouseLocation[1] - click[1])/sensitivity*scale);
-    if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
-      moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
-    }
-    dx = dx * moveScale;
-    dy = dy * moveScale;
-  
+  getMousePosition(canvas, e);
+  isClicked = false;
+  dx = ((mouseLocation[0] - click[0]) / sensitivity * scale);
+  dy = ((mouseLocation[1] - click[1]) / sensitivity * scale);
+  if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
+    moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
+  }
+  dx = dx * moveScale;
+  dy = dy * moveScale;
+
 });
 canvas.addEventListener("mousemove", function(e) {
   mouseLocation = getMousePosition(canvas, e);
@@ -426,7 +431,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 
 window.onload = function() {
-	init();
+  init();
   music.volume = 0.75
   if (level - 1 >= 0) {
     x = levels[level - 1].startX;
@@ -568,7 +573,7 @@ function gameObjects() {
             }
           }
         }
-        ctx.font = "bold " + 20 * scale + "px Comic Sans MS";
+        ctx.font = "bold " + 20 * scale + "px Coming Soon";
         ctx.fillStyle = curLevel.textColor[i];
         ctx.textAlign = "center";
         if (curLevel.indicator[i] == "hp") {
@@ -787,7 +792,7 @@ function levelChangeAnimate() {
   ctx.beginPath();
   if (txt.charAt(0) != "@") {
     txt = txt.split("\n")
-    ctx.font = 192 / txt.length * scale + "px Comic Sans MS";
+    ctx.font = 192 / txt.length * scale + "px Coming Soon";
     for (k = 0; k < txt.length; k++) {
       txtlength[k] = ctx.measureText(txt[k]).width;
 
@@ -801,7 +806,7 @@ function levelChangeAnimate() {
     } else {
       scaleText = 1;
     }
-    ctx.font = Math.ceil(192 / txt.length * scaleText * scale) + "px Comic Sans MS"
+    ctx.font = Math.ceil(192 / txt.length * scaleText * scale) + "px Coming Soon"
 
 
     ctx.fillStyle = levelChangeColor[1];
@@ -894,11 +899,11 @@ function toggleColor(object, i) {
   } else {
     changeColor(i, blue);
   }
-  console.log(object.color1)
+
   if (levels[level - 1].startColor[object.index] == object.color1) {
     levels[level - 1].startColor[object.index] = object.color2;
     levels[level - 1].color[object.index] = object.color2;
-    console.log('dope')
+
   } else {
     levels[level - 1].startColor[object.index] = object.color1;
     levels[level - 1].color[object.index] = object.color1;
@@ -917,7 +922,7 @@ function fixBlock(index, i) {
 }
 
 function changeColor(index, color) {
-  console.log(color);
+
   levels[level - 1].startColor[index] = color;
   levels[level - 1].color[index] = color;
 }
@@ -964,7 +969,7 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
 }
 
 function log() {
-  console.log(mouseLocation);
+
 }
 
 function startScreen() {
@@ -1042,7 +1047,7 @@ function startScreen() {
   } else {
     ctx.fillStyle = "rgb(128, 128, 128)"
   }
-  ctx.font = "bold " + 30 * scale + "px Comic Sans MS"
+  ctx.font = "bold " + 30 * scale + "px Coming Soon"
   ctx.textAlign = "center"
   ctx.fillText("Play", 240 * scale, 220 * scale)
   ctx.closePath();
@@ -1070,12 +1075,12 @@ function startScreen() {
 function draw_line() {
   if (level > 0) {
     if (isClicked == true) {
-			if(Math.sqrt(((mouseLocation[0] - click[0]) / sensitivity) ** 2 + ((mouseLocation[1] - click[1]) / sensitivity) ** 2) * scale > maxSpeed) {
-				lineEnd[0] = ((((mouseLocation[0] - click[0])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed/scale) * sensitivity)+click[0];
-				lineEnd[1] = ((((mouseLocation[1] - click[1])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed/scale) * sensitivity)+click[1];
-			} else {
-				lineEnd = mouseLocation
-			}
+      if (Math.sqrt(((mouseLocation[0] - click[0]) / sensitivity) ** 2 + ((mouseLocation[1] - click[1]) / sensitivity) ** 2) * scale > maxSpeed) {
+        lineEnd[0] = ((((mouseLocation[0] - click[0])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed / scale) * sensitivity) + click[0];
+        lineEnd[1] = ((((mouseLocation[1] - click[1])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed / scale) * sensitivity) + click[1];
+      } else {
+        lineEnd = mouseLocation
+      }
       ctx.beginPath();
       ctx.lineWidth = 2 * scale
       ctx.fillStyle = linecolor
@@ -1092,8 +1097,7 @@ function getMousePosition(canvas, event) {
   let rect = canvas.getBoundingClientRect();
   let x = event.clientX - rect.left;
   let y = event.clientY - rect.top;
-  console.log("Coordinate x: " + Math.ceil(x / scale),
-    "Coordinate y: " + Math.ceil(y / scale));
-  return ([Math.ceil(x/scale), Math.ceil(y/scale)])
+
+  return ([Math.ceil(x / scale), Math.ceil(y / scale)])
 }
 setInterval(log, 1000);
