@@ -8,10 +8,12 @@ var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var isClicked = false;
 var moveScale = 1;
+var lineEnd = [0, 0];
 var dy = 0;
 var minSpeed = 0.2;
 var click = [0, 0];
 var mouseLocation = [0, 0];
+var sensitivity = 50
 var musicPlaying = false;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
 var levelChangeText = "let's go"
@@ -372,17 +374,16 @@ canvas.addEventListener("mousedown", function(e) {
   }
 });
 canvas.addEventListener("mouseup", function(e) {
-  if (Math.sqrt(((mouseLocation[0] - click[0]) / 10 * scale) ** 2 + ((mouseLocation[1] - click[1]) / 10 * scale) ** 2) >= 2 * scale) {
     getMousePosition(canvas, e);
     isClicked = false;
-    dx = ((mouseLocation[0] - click[0]) / 50) * scale;
-    dy = ((mouseLocation[1] - click[1]) / 50) * scale;
+    dx = ((mouseLocation[0] - click[0])/sensitivity*scale);
+    dy = ((mouseLocation[1] - click[1])/sensitivity*scale);
     if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
       moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
     }
     dx = dx * moveScale;
     dy = dy * moveScale;
-  }
+  
 });
 canvas.addEventListener("mousemove", function(e) {
   mouseLocation = getMousePosition(canvas, e);
@@ -1033,11 +1034,17 @@ function startScreen() {
 function draw_line() {
   if (level > 0) {
     if (isClicked == true) {
+			if(Math.sqrt(((mouseLocation[0] - click[0]) / sensitivity) ** 2 + ((mouseLocation[1] - click[1]) / sensitivity) ** 2) * scale > maxSpeed) {
+				lineEnd[0] = ((((mouseLocation[0] - click[0])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed/scale) * sensitivity)+click[0];
+				lineEnd[1] = ((((mouseLocation[1] - click[1])) / Math.sqrt(((mouseLocation[0] - click[0])) ** 2 + ((mouseLocation[1] - click[1])) ** 2)) * (maxSpeed/scale) * sensitivity)+click[1];
+			} else {
+				lineEnd = mouseLocation
+			}
       ctx.beginPath();
       ctx.lineWidth = 2 * scale
       ctx.fillStyle = linecolor
       ctx.moveTo(click[0] * scale, click[1] * scale)
-      ctx.lineTo(mouseLocation[0] * scale, mouseLocation[1] * scale)
+      ctx.lineTo(lineEnd[0] * scale, lineEnd[1] * scale)
       ctx.stroke();
       ctx.closePath();
 
@@ -1051,6 +1058,6 @@ function getMousePosition(canvas, event) {
   let y = event.clientY - rect.top;
   console.log("Coordinate x: " + Math.ceil(x / scale),
     "Coordinate y: " + Math.ceil(y / scale));
-  return ([Math.ceil(x / scale), Math.ceil(y / scale)])
+  return ([Math.ceil(x/scale), Math.ceil(y/scale)])
 }
 setInterval(log, 1000);
