@@ -18,6 +18,7 @@ var levelChangeText = "let's go"
 var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
+var breakSpeed = 2 * scale;
 var select = 0;
 var linecolor = "rgb(52, 155, 235)"
 var isBrokeCopy = [];
@@ -549,13 +550,13 @@ function gameObjects() {
             if (y > yPos && y < yPos + height) {
               if (x > xPos + width) {
                 x = xPos + width + radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > breakSpeed) {
                   hit(i);
                 }
               }
               if (x <= xPos) {
                 x = xPos - radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > breakSpeed) {
                   hit(i);
                 }
               }
@@ -563,13 +564,13 @@ function gameObjects() {
             } else if (x > xPos && x < xPos + width) {
               if (y > yPos + height) {
                 y = yPos + height + radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > breakSpeed) {
                   hit(i);
                 }
               }
               if (y < yPos) {
                 y = yPos - radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > breakSpeed) {
                   hit(i);
                 }
               }
