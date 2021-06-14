@@ -373,7 +373,7 @@ canvas.addEventListener("mousedown", function(e) {
     isClicked = true;
   }
 });
-canvas.addEventListener("mouseup", function(e) {
+window.addEventListener("mouseup", function(e) {
     getMousePosition(canvas, e);
     isClicked = false;
     dx = ((mouseLocation[0] - click[0])/sensitivity*scale);
