@@ -7,8 +7,9 @@ var x = 110 * scale; //starting position x
 var y = canvas.height * 0.75; //starting position y
 var dx = 0;
 var isClicked = false;
+var moveScale = 1;
 var dy = 0;
-var minSpeed = 0.4 * scale;
+var minSpeed = 0.2;
 var click = [0, 0];
 var mouseLocation = [0, 0];
 var musicPlaying = false;
@@ -26,7 +27,7 @@ var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
-var acceleration = 3 * scale; //acceleration of character
+var acceleration = 7 * scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
 var level = 1; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
@@ -370,13 +371,13 @@ canvas.addEventListener("mousedown", function(e) {
   }
 });
 canvas.addEventListener("mouseup", function(e) {
-  if (Math.sqrt(((mouseLocation[0] - click[0]) / 10 * scale) ** 2 + ((mouseLocation[1] - click[1]) / 10 * scale) ** 2) >= 2) {
+  if (Math.sqrt(((mouseLocation[0] - click[0]) / 10 * scale) ** 2 + ((mouseLocation[1] - click[1]) / 10 * scale) ** 2) >= 2 * scale) {
     getMousePosition(canvas, e);
     isClicked = false;
     dx = (mouseLocation[0] - click[0]) / 10 * scale;
     dy = (mouseLocation[1] - click[1]) / 10 * scale;
     if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
-      var moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
+      moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
     }
     dx = dx * moveScale;
     dy = dy * moveScale;
@@ -404,7 +405,7 @@ window.onload = function() {
 
   levelChange = level;
   dx = 0;
-
+  slowdown()
 };
 
 function update() {
@@ -414,48 +415,23 @@ function update() {
   draw_line()
 }
 
+function slowdown() {
+  if (Math.sqrt(dx ** 2 + dy ** 2) >= minSpeed) {
+    dx = dx - (dx / Math.sqrt(dx ** 2 + dy ** 2) * (acceleration / 100))
+    dy = dy - (dy / Math.sqrt(dx ** 2 + dy ** 2) * (acceleration / 100))
+  } else {
+    dx = 0
+    dy = 0
+  }
+  setTimeout(function() {
+    window.requestAnimationFrame(slowdown);
+  }, 10);
+}
+
 function move() {
+
   if (isChanging === false && level > 0) {
-    if (pressedKeys[38] && !pressedKeys[40]) {
-      if (dy > -maxSpeed) {
-        dy = dy - acceleration / 100;
-      }
-    } else if (pressedKeys[40]) {
-      if (dy < maxSpeed) {
-        dy = dy + acceleration / 100;
-      }
-    } else {
-      if (dy > 0.2 * scale) {
-        dy = dy - acceleration / 100;
-      }
-      if (dy < -0.2 * scale) {
-        dy = dy + acceleration / 100;
-      }
-      if (Math.sqrt(dx ** 2 + dy ** 2) < minSpeed * scale) {
-        dx = 0;
-        dy = 0;
-      }
-    }
-    if (pressedKeys[37] && !pressedKeys[39]) {
-      if (dx > -maxSpeed) {
-        dx = dx - acceleration / 100;
-      }
-    } else if (pressedKeys[39]) {
-      if (dx < maxSpeed) {
-        dx = dx + acceleration / 100;
-      }
-    } else {
-      if (dx > 0.2 * scale) {
-        dx = dx - acceleration / 100;
-      }
-      if (dx < -0.2 * scale) {
-        dx = dx + acceleration / 100;
-      }
-      if (Math.sqrt(dx ** 2 + dy ** 2) < minSpeed * scale) {
-        dx = 0;
-        dy = 0;
-      }
-    }
+
     y = y + dy;
     x = x + dx;
     if (y < 0 + radius) {
@@ -817,8 +793,9 @@ function levelChangeAnimate() {
     dx = 0;
     dy = 0;
   }
-
 }
+
+
 
 function changeLevel() {
 
