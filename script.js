@@ -6,7 +6,11 @@ canvas.width = canvas.width * scale;
 var x = 110 * scale; //starting position x
 var y = canvas.height * 0.75; //starting position y
 var dx = 0;
+var isClicked = false;
 var dy = 0;
+var minSpeed = 0.2;
+var click = [0, 0];
+var mouseLocation = [0, 0];
 var musicPlaying = false;
 var levelChangeColor = ["rgb(100, 100, 100)", "rgb(250, 250, 250)"]
 var levelChangeText = "let's go"
@@ -14,6 +18,7 @@ var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
 var select = 0;
+var linecolor = "rgb(52, 155, 235)"
 var isBrokeCopy = [];
 var startColorCopy = [];
 var isMoving = false;
@@ -21,10 +26,10 @@ var levelChange = 0;
 var isChanging = false;
 var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
-var acceleration = 7 *
+var acceleration = 1 *
   scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 0; //current level
+var level = 1; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
@@ -149,7 +154,10 @@ var levels = [{
     functions: [{
       name: [breakBlock],
       properties: [1]
-    }, "none", "none", "none", {name: [fixBlock], properties: [0]}],
+    }, "none", "none", "none", {
+      name: [fixBlock],
+      properties: [0]
+    }],
     sounds: ["switch", death, blockhit, indestructibleHit, "switch"],
     eNum: 5,
     startX: 110 * scale,
@@ -324,7 +332,9 @@ music.addEventListener('ended', function() {
   this.play();
 }, false);
 
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+function clamp(number, min, max) {
+  return Math.max(min, Math.min(number, max));
+}
 window.onkeyup = function(e) {
   pressedKeys[e.keyCode] = false;
 }
@@ -354,6 +364,30 @@ window.addEventListener('mousedown', e => {
   music.play();
 });
 
+canvas.addEventListener("mousedown", function(e) {
+  if (isClicked == false) {
+    click = getMousePosition(canvas, e);
+    isClicked = true;
+  }
+});
+canvas.addEventListener("mouseup", function(e) {
+  if (Math.sqrt(((mouseLocation[0] - click[0]) / 10 * scale) ** 2 + ((mouseLocation[1] - click[1]) / 10 * scale) ** 2) >= 2) {
+    getMousePosition(canvas, e);
+    isClicked = false;
+    dx = (mouseLocation[0] - click[0]) / 10 * scale;
+    dy = (mouseLocation[1] - click[1]) / 10 * scale;
+    if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
+      var moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
+    }
+    dx = dx * moveScale;
+    dy = dy * moveScale;
+  }
+});
+canvas.addEventListener("mousemove", function(e) {
+  mouseLocation = getMousePosition(canvas, e);
+
+});
+
 window.onload = function() {
   music.volume = 0.75
   if (level - 1 >= 0) {
@@ -378,6 +412,7 @@ function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   gameObjects();
   move();
+  draw_line()
 }
 
 function move() {
@@ -397,7 +432,8 @@ function move() {
       if (dy < -0.2 * scale) {
         dy = dy + acceleration / 100;
       }
-      if (Math.abs(dy) < 0.2 * scale) {
+      if (Math.sqrt(dx ** 2 + dy ** 2) < minSpeed * scale) {
+        dx = 0;
         dy = 0;
       }
     }
@@ -416,8 +452,9 @@ function move() {
       if (dx < -0.2 * scale) {
         dx = dx + acceleration / 100;
       }
-      if (Math.abs(dx) < 0.2 * scale) {
+      if (Math.sqrt(dx ** 2 + dy ** 2) < minSpeed * scale) {
         dx = 0;
+        dy = 0;
       }
     }
     y = y + dy;
@@ -537,15 +574,13 @@ function gameObjects() {
             if (y > yPos && y < yPos + height) {
               if (x > xPos + width) {
                 x = xPos + width + radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale && Math.abs(dy) <
-                  Math.abs(dx)) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
                   hit(i);
                 }
               }
               if (x <= xPos) {
                 x = xPos - radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale && Math.abs(dy) <
-                  Math.abs(dx)) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
                   hit(i);
                 }
               }
@@ -553,13 +588,13 @@ function gameObjects() {
             } else if (x > xPos && x < xPos + width) {
               if (y > yPos + height) {
                 y = yPos + height + radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale && Math.abs(dy) > Math.abs(dx)) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
                   hit(i);
                 }
               }
               if (y < yPos) {
                 y = yPos - radius;
-                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale && Math.abs(dy) > Math.abs(dx)) {
+                if (Math.sqrt((dx ** 2) + (dy ** 2)) > 2.5 * scale) {
                   hit(i);
                 }
               }
@@ -787,7 +822,7 @@ function levelChangeAnimate() {
 }
 
 function changeLevel() {
-  
+
   levels[level - 1].isBroke.forEach(function(part, index, theArray) {
     theArray[index] = isBrokeCopy[index];
   });
@@ -864,7 +899,7 @@ function fixBlock(index, i) {
     switchHit.play();
   }
   levels[level - 1].isBroke[index] = false;
-	levels[level - 1].D[index] = 0;
+  levels[level - 1].D[index] = 0;
 }
 
 function changeColor(index, color) {
@@ -915,8 +950,7 @@ CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
 }
 
 function log() {
-
-
+  console.log(mouseLocation);
 }
 
 function startScreen() {
@@ -1017,7 +1051,29 @@ function startScreen() {
     setTimeout(levelChangeAnimate, 1000);
     isChanging = true;
   }
+}
 
+function draw_line() {
+  if (level > 0) {
+    if (isClicked == true) {
+      ctx.beginPath();
+      ctx.lineWidth = 2 * scale
+      ctx.fillStyle = linecolor
+      ctx.moveTo(click[0] * scale, click[1] * scale)
+      ctx.lineTo(mouseLocation[0] * scale, mouseLocation[1] * scale)
+      ctx.stroke();
+      ctx.closePath();
 
+    }
+  }
+}
+
+function getMousePosition(canvas, event) {
+  let rect = canvas.getBoundingClientRect();
+  let x = event.clientX - rect.left;
+  let y = event.clientY - rect.top;
+  console.log("Coordinate x: " + Math.ceil(x / scale),
+    "Coordinate y: " + Math.ceil(y / scale));
+  return ([Math.ceil(x / scale), Math.ceil(y / scale)])
 }
 setInterval(log, 1000);
