@@ -400,7 +400,7 @@ window.addEventListener("mouseup", function(e) {
 
 });
 window.addEventListener("touchend", function(evt) {
-  getMousePosition(canvas, evt.touches[0]);
+  
   isClicked = false;
   dx = ((mouseLocation[0] - click[0]) / sensitivity * scale);
   dy = ((mouseLocation[1] - click[1]) / sensitivity * scale);
