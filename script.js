@@ -382,7 +382,7 @@ canvas.addEventListener("mousedown", function(e) {
 canvas.addEventListener("touchstart", function(evt) {
   if (isClicked == false) {
     https: //jsfiddle.net/illjsfiddleyourpickle/oLq3vxer/1089/#
-      click = getMousePosition(canvas, evt);
+      click = getMousePosition(canvas, evt[0]);
     isClicked = true;
   }
 });
@@ -400,7 +400,7 @@ window.addEventListener("mouseup", function(e) {
 
 });
 window.addEventListener("touchend", function(evt) {
-  getMousePosition(canvas, evt);
+  getMousePosition(canvas, evt[0]);
   isClicked = false;
   dx = ((mouseLocation[0] - click[0]) / sensitivity * scale);
   dy = ((mouseLocation[1] - click[1]) / sensitivity * scale);
@@ -417,7 +417,7 @@ canvas.addEventListener("mousemove", function(e) {
 
 });
 canvas.addEventListener("touchmove", function(evt) {
-  mouseLocation = getMousePosition(canvas, evt);
+  mouseLocation = getMousePosition(canvas, evt[0]);
 
 });
 
