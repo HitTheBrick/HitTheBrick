@@ -397,7 +397,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 
 window.onload = function() {
-  init();
+  
   music.volume = 0.75
   if (level - 1 >= 0) {
     x = levels[level - 1].startX;
