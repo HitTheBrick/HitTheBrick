@@ -538,6 +538,7 @@ function gameObjects() {
 		ctx.drawImage(images.get("back arrow"), 10 * scale, 10 * scale, 40 * scale, 40 * scale);
 		if(click[0] > 10 && click[0] < 50 && click[1] > 10 && click[1] < 50) {
 			levelChange = 0;
+			changeLevel();
 			
 		}
   } else if (level == 0) {
