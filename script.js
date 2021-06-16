@@ -379,6 +379,14 @@ canvas.addEventListener("mousedown", function(e) {
   }
 });
 
+canvas.addEventListener("touchstart", function(evt) {
+  if (isClicked == false) {
+    https: //jsfiddle.net/illjsfiddleyourpickle/oLq3vxer/1089/#
+      click = getMousePosition(canvas, evt);
+    isClicked = true;
+  }
+});
+
 window.addEventListener("mouseup", function(e) {
   getMousePosition(canvas, e);
   isClicked = false;
@@ -391,8 +399,25 @@ window.addEventListener("mouseup", function(e) {
   dy = dy * moveScale;
 
 });
+window.addEventListener("touchend", function(evt) {
+  getMousePosition(canvas, evt);
+  isClicked = false;
+  dx = ((mouseLocation[0] - click[0]) / sensitivity * scale);
+  dy = ((mouseLocation[1] - click[1]) / sensitivity * scale);
+  if (Math.sqrt(dx ** 2 + dy ** 2) > maxSpeed) {
+    moveScale = maxSpeed / Math.max(Math.abs(dx), Math.abs(dy));
+  }
+  dx = dx * moveScale;
+  dy = dy * moveScale;
+
+});
+
 canvas.addEventListener("mousemove", function(e) {
   mouseLocation = getMousePosition(canvas, e);
+
+});
+canvas.addEventListener("touchmove", function(evt) {
+  mouseLocation = getMousePosition(canvas, evt);
 
 });
 
