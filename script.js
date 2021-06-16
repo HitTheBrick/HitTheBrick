@@ -21,6 +21,7 @@ var imageRepeat = [];
 var pausex = 0;
 var pausey = 0;
 var breakSpeed = 2 * scale;
+var isMusicOn = false;
 var select = 0;
 var linecolor = "rgb(52, 155, 235)"
 var isBrokeCopy = [];
@@ -32,7 +33,7 @@ var radius = 10 * scale; //character size
 var pressedKeys = {}; //input checker
 var acceleration = 4 * scale; //acceleration of character
 var maxSpeed = 3 * scale; //max speed of character
-var level = 1; //current level
+var level = 0; //current level
 var energyLoss = 2 * scale; //energy lost during collisions
 var balfade = 0; //time measuring variable
 var winAnimation = 0;
@@ -332,7 +333,25 @@ var images = new ImageCollection([{
 }, {
   name: "blue fix",
   url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/bluefix.png?raw=true"
-}, ]);
+}, {
+  name: "music off",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/musicoff.png?raw=true"
+},{
+  name: "music on",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/musicon.png?raw=true"
+},{
+  name: "full vol",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/fullvolume.png?raw=true"
+},{
+  name: "low vol",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/lowvolume.png?raw=true"
+},{
+  name: "mute",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/mute.png?raw=true"
+},{
+  name: "back arrow",
+  url: "https://github.com/HitTheBrick/HitTheBrick.github.io/blob/main/backarrow.png?raw=true"
+},]);
 
 music.addEventListener('ended', function() {
   this.currentTime = 0;
@@ -400,7 +419,7 @@ window.addEventListener("mouseup", function(e) {
 
 });
 window.addEventListener("touchend", function(evt) {
-  
+
   isClicked = false;
   dx = ((mouseLocation[0] - click[0]) / sensitivity * scale);
   dy = ((mouseLocation[1] - click[1]) / sensitivity * scale);
@@ -422,7 +441,7 @@ canvas.addEventListener("touchmove", function(evt) {
 });
 
 window.onload = function() {
-  
+
   music.volume = 0.75
   if (level - 1 >= 0) {
     x = levels[level - 1].startX;
@@ -445,6 +464,27 @@ window.onload = function() {
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   gameObjects();
+  if (mouseLocation[0] > 190 && mouseLocation[0] < 290 && started == false) {
+
+    if (mouseLocation[1] > 190 && mouseLocation[1] < 230) {
+      select = 0;
+    }
+    if (mouseLocation[1] > 250 && mouseLocation[1] < 290) {
+      select = 1;
+    }
+    if (click[1] > 190 && click[1] < 230 && started == false) {
+      isFlashPlaying = false;
+      started = true;
+      levelChange = 1;
+
+    }
+    if (click[1] > 250 && click[1] < 290 && started == false) {
+      isFlashPlaying = false;
+      started = true;
+      levelChange = -1;
+
+    }
+  }
   move();
   draw_line()
 }
@@ -494,7 +534,13 @@ function move() {
 }
 
 function gameObjects() {
-  if (level == 0) {
+  if (level == -1) {
+		ctx.drawImage(images.get("back arrow"), 10 * scale, 10 * scale, 40 * scale, 40 * scale);
+		if(click[0] > 10 && click[0] < 50 && click[1] > 10 && click[1] < 50) {
+			levelChange = 0;
+			
+		}
+  } else if (level == 0) {
     for (i = 0; i < levels[level].isBroke.length; i++) {
       isBrokeCopy[i] = levels[level].isBroke[i];
     }
@@ -503,7 +549,7 @@ function gameObjects() {
     }
     startScreen();
   } else if (typeof levels[level - 1] === "undefined") {
-    level = 1;
+    //level = 1;
   } else {
     for (i = 0; i < levels[level - 1].eNum; i++) {
       if (levels[level - 1].isBroke[i] == false) {
@@ -764,11 +810,13 @@ function levelChangeAnimate() {
 
     isMoving = true;
     winCoverMove = canvas.width * (2 - (winAnimation - 0.05));
+		if(level > 0) {
     ctx.beginPath();
     ctx.arc(levels[level - 1].startX, levels[level - 1].startY, radius, 0, Math.PI * 2);
     ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fill();
     ctx.closePath();
+		}
     if (winAnimation > 1.95) {
       rumble.volume = Math.max(1 - (winAnimation - 1.95) * 10, 0);
 
@@ -822,8 +870,10 @@ function levelChangeAnimate() {
     isMoving = false;
     rumble.pause();
     rumble.currentTime = 0;
-    y = levels[level - 1].startY;
-    x = levels[level - 1].startX;
+    if (levels > 0) {
+      y = levels[level - 1].startY;
+      x = levels[level - 1].startX;
+    }
     dx = 0;
     dy = 0;
   }
@@ -1033,24 +1083,24 @@ function startScreen() {
   ctx.roundRect((240 - 50) * scale, 250 * scale, 100 * scale, 40 * scale, 10 * scale).fill();
   ctx.closePath();
   ctx.beginPath();
-  if (select == 1 && flashFrame % 2 == 0) {
-    ctx.fillStyle = "rgb(250, 237, 9)"
-  } else {
+  if (select == 0 && flashFrame % 2 == 0) {
     ctx.fillStyle = "rgb(128, 128, 128)"
+  } else {
+    ctx.fillStyle = "rgb(250, 237, 9)"
   }
   ctx.font = "bold " + 30 * scale + "px Coming Soon"
   ctx.textAlign = "center"
   ctx.fillText("Play", 240 * scale, 220 * scale)
   ctx.closePath();
   ctx.beginPath();
-  if (select == 0) {
-    ctx.fillStyle = "rgb(250, 237, 9)"
-  } else {
+  if (select == 1 && flashFrame % 2 == 0) {
     ctx.fillStyle = "rgb(128, 128, 128)"
+  } else {
+    ctx.fillStyle = "rgb(250, 237, 9)"
   }
-  ctx.font = "bold " + 20 * scale + "px Comic Sans MS"
+  ctx.font = "bold " + 25 * scale + "px Comic Sans MS"
   ctx.textAlign = "center"
-  ctx.fillText("Settings", 240 * scale, 275 * scale)
+  ctx.fillText("About", 240 * scale, 275 * scale)
   ctx.closePath();
   if (flashFrame < 20) {
     if (isFlashPlaying == false) {
